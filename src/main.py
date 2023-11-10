@@ -41,7 +41,7 @@ class Game(View):
         super().__init__()
         pygame.display.set_caption("Traffic Evader")
 
-        self.player = Player((25, 225))
+        self.player = Player((WIDTH // 2 - 95, 400))
         self.background = Background()
 
         self.fonts = FontManager()
@@ -53,8 +53,17 @@ class Game(View):
                 pygame.quit()
                 sys.exit()
 
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            self.player.move_left()
+        elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            self.player.move_right()
+
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
+        self.background.update()
+        self.player.update()
 
 
     def render(self) -> None:
