@@ -63,13 +63,13 @@ class Background(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
 
-        self.image = pygame.image.load("./sprites/road_4.png")
+        self.image = pygame.image.load("./sprites/road_4.png").convert()
         self.rect = self.image.get_rect()
 
         self.rect.x = (WIDTH - self.rect.width) // 2
         self.rect.bottom = HEIGHT
 
-    def update(self):
+    def update(self, speed: int):
         """Move background for new frame"""
 
         # The background is twice the screen size.
@@ -77,7 +77,7 @@ class Background(pygame.sprite.Sprite):
         if self.rect.y >= HEIGHT:
             self.rect.bottom = HEIGHT
 
-        self.rect.y += 1
+        self.rect.y += speed
 
     def draw(self, dest_surface: pygame.Surface):
         """Draw this sprite onto dest_surface."""

@@ -5,7 +5,7 @@ import pygame
 from sprites import Player, Background
 from ui import Button
 from managers import FontManager
-from config import WIDTH, HEIGHT, FPS
+from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED
 
 class View():
     """A base class for all game views with a game loop"""
@@ -51,6 +51,8 @@ class Game(View):
         self.player = Player((WIDTH // 2 - 95, 400))
         self.background = Background()
 
+        self.frame_count = 0
+        self.speed = INITIAL_SPEED
         self.fonts = FontManager()
 
     def process_input(self) -> None:
@@ -68,9 +70,15 @@ class Game(View):
 
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
-        self.background.update()
+        self.background.update(self.speed)
         self.player.update()
 
+        self.frame_count += 1
+        # Each "speed level" duration is constantly increasing
+        # (speed is 2 for 1200 frames, speed is 5 for 6000 frames, etc)
+        if self.frame_count >= self.speed * 600:
+            self.frame_count = 0
+            self.speed += 1
 
     def render(self) -> None:
         """Render: Fill background, blit sprites, etc"""
