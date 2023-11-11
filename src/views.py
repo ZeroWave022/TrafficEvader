@@ -3,6 +3,7 @@
 import sys
 import pygame
 from sprites import Player, Background
+from ui import Button
 from managers import FontManager
 from config import WIDTH, HEIGHT, FPS
 
@@ -83,11 +84,8 @@ class Menu(View):
         pygame.display.set_caption("Traffic Evader")
 
         self.fonts = FontManager()
-        self.play_button = pygame.draw.rect(
-            self.screen,
-            "gray",
-            (WIDTH // 2 - 75, HEIGHT - 350, 150, 50)
-        )
+        self.title = self.fonts.font_title.render("Traffic Evader", True, "black")
+        self.play_button = Button((WIDTH // 2 - 75, HEIGHT - 350, 150, 50), text="Play")
 
     def process_input(self) -> None:
         for event in pygame.event.get():
@@ -95,25 +93,17 @@ class Menu(View):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_position = pygame.mouse.get_pos()
+                self.play_button.click_event()
 
-                if self.play_button.collidepoint(mouse_position):
-                    self.active = False
-                    self.transition_to = Game()
+        if self.play_button.clicked:
+            self.active = False
+            self.transition_to = Game()
 
     def render(self) -> None:
         self.screen.fill((255, 255, 255))
 
-        pygame.draw.rect(
-            self.screen,
-            "gray",
-            (WIDTH // 2 - 75, HEIGHT - 350, 150, 50)
-        )
+        self.play_button.draw(self.screen)
 
-        title = self.fonts.font_title.render("Traffic Evader", True, "black")
-        button_text = self.fonts.font_button.render("Play", True, "black")
-
-        self.screen.blit(title, ((WIDTH - title.get_width()) // 2, HEIGHT - 450))
-        self.screen.blit(button_text, button_text.get_rect(center=self.play_button.center))
+        self.screen.blit(self.title, ((WIDTH - self.title.get_width()) // 2, HEIGHT - 450))
 
         pygame.display.flip()
