@@ -5,7 +5,7 @@ import pygame
 from sprites import Player, Background
 from ui import Button
 from managers import FontManager
-from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED
+from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED, LEVELS
 
 class View():
     """A base class for all game views with a game loop"""
@@ -44,10 +44,13 @@ class View():
 
 class Game(View):
     """Main game view class"""
-    def __init__(self) -> None:
+    def __init__(self, difficulty_name: str) -> None:
         super().__init__()
         pygame.display.set_caption("Traffic Evader")
 
+        self.level = LEVELS[difficulty_name]
+        self.player = Player(self.level)
+        self.background = Background(self.level)
         self.player = Player((WIDTH // 2 - 95, 400))
         self.background = Background()
 
@@ -114,7 +117,7 @@ class Menu(View):
 
         if self.play.clicked:
             self.active = False
-            self.transition_to = Game()
+            self.transition_to = Game("normal")
 
         if self.exit_btn.clicked:
             self.exit()

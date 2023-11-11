@@ -7,34 +7,35 @@ from config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
 
 class Player(pygame.sprite.Sprite):
     """Class managing the player"""
-    def __init__(self, coords: tuple[int, int]) -> None:
+    def __init__(self, level: dict) -> None:
         super().__init__()
 
         self._raw_image = pygame.image.load("./sprites/blue_car.png").convert_alpha()
         self.image = pygame.transform.scale_by(self._raw_image, 1.2)
         self.rect = self.image.get_rect()
+        self.level_info = level
 
-        self.rect.x = coords[0]
-        self.rect.y = coords[1]
+        self.rect.x = self.level_info["player"]["init_x"]
+        self.rect.y = 400
 
-        self.current_lane = 2
+        self.current_lane = self.level_info["player"]["init_lane"]
         self.switching_lane: Literal["left", "right", False] = False
         self.switch_frames = round(15 / LANE_SWITCH_SPEED)
-        self.lane_delta_x = round(115 / self.switch_frames)
+        self.lane_delta_x = round(self.level_info["lane_width"] / self.switch_frames)
         self.moving_to = 0
 
     def move_left(self) -> None:
         if not self.switching_lane and self.current_lane - 1 >= 1:
             self.switching_lane = "left"
             self.current_lane -= 1
-            self.moving_to = self.rect.centerx - 115
+            self.moving_to = self.rect.centerx - self.level_info["lane_width"]
 
 
     def move_right(self) -> None:
-        if not self.switching_lane and self.current_lane + 1 <= 4:
+        if not self.switching_lane and self.current_lane + 1 <= self.level_info["lanes"]:
             self.switching_lane = "right"
             self.current_lane += 1
-            self.moving_to = self.rect.centerx + 115
+            self.moving_to = self.rect.centerx + self.level_info["lane_width"]
 
     def update(self) -> None:
         if self.switching_lane == "left":
@@ -60,10 +61,11 @@ class Player(pygame.sprite.Sprite):
 
 class Background(pygame.sprite.Sprite):
     """Class managing game background"""
-    def __init__(self) -> None:
+    def __init__(self, level: dict) -> None:
         super().__init__()
 
-        self.image = pygame.image.load("./sprites/road_4.png").convert()
+        self.level_info = level
+        self.image = pygame.image.load(f"./sprites/road_{self.level_info['lanes']}.png").convert()
         self.rect = self.image.get_rect()
 
         self.rect.x = (WIDTH - self.rect.width) // 2
