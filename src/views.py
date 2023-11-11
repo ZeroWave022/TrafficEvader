@@ -36,6 +36,11 @@ class View():
             self.render()
             self.clock.tick(FPS)
 
+    def exit(self):
+        """Quit pygame and end python process"""
+        pygame.quit()
+        sys.exit()
+
 
 class Game(View):
     """Main game view class"""
@@ -52,8 +57,7 @@ class Game(View):
         """Process game inputs"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.exit()
 
         keys = pygame.key.get_pressed()
 
@@ -90,8 +94,7 @@ class Menu(View):
     def process_input(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.play_button.click_event()
 
