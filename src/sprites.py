@@ -71,12 +71,19 @@ class Coin(GameObject):
     def __init__(self, position: tuple[int, int]) -> None:
         super().__init__("./sprites/coin.png", (160, 32))
 
+        # self.image and self.rect will be overwritten with coin used from the sprite sheet
+        self.sheet_img = self.image
+        self.sheet_rect = self.rect
+
         self.frame_counter = 0
         self.current_sprite = 0
         self.sprites = 4
 
-        # Set new rect to avoid using whole sprite sheet as rect
-        self.rect = pygame.rect.Rect(0, 0, 32, 32)
+        # Create a 32x32 surface and blit initial sprite onto it
+        self.image = pygame.surface.Surface((32, 32), pygame.SRCALPHA).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.image.blit(self.sheet_img, (0, 0), self.rect)
+
         self.rect.x = position[0]
         self.rect.y = position[1]
 
@@ -89,13 +96,13 @@ class Coin(GameObject):
             else:
                 self.current_sprite += 1
 
-            self.frame_counter = 0
-        
-        self.rect.y += speed
+            self.image.fill((0, 0, 0, 0))
+            # Move the area (third argument) based on the next coin sprite to be shown
+            self.image.blit(self.sheet_img, (0, 0), (self.current_sprite*32, 0, 32, 32))
 
-    def draw(self, dest_surface: pygame.Surface):
-        # Move the area (third argument) based on the next coin sprite to be shown
-        return dest_surface.blit(self.image, self.rect, (self.current_sprite*32, 0, 32, 32))
+            self.frame_counter = 0
+
+        self.rect.y += speed
 
 class Obstacle(GameObject):
     def __init__(self, img_path: str, position: tuple[int, int]):

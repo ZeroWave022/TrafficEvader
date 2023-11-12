@@ -2,8 +2,8 @@
 
 import sys
 from random import randint
-import pygame
 from typing import Literal
+import pygame
 from sprites import Player, Background, Coin, Obstacle
 from ui import Button
 from managers import FontManager
@@ -53,8 +53,8 @@ class Game(View):
         self.level = LEVELS[difficulty_name]
         self.player = Player(self.level)
         self.background = Background(self.level)
-        self.coins: list[Coin] = []
-        self.obstacles: list[Obstacle] = []
+        self.coins: pygame.sprite.Group[Coin] = pygame.sprite.Group()
+        self.obstacles: pygame.sprite.Group[Obstacle] = pygame.sprite.Group()
 
         self.frame_count = 0
         self.speed = INITIAL_SPEED
@@ -90,42 +90,41 @@ class Game(View):
 
             if obj == "obstacle":
                 pos_x -= obstacle_width//2
-                self.obstacles.append(
+                self.obstacles.add(
                     Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
                 )
             elif obj == "coin":
                 pos_x -= coin_width//2
-                self.coins.append(Coin((pos_x, -height)))
+                self.coins.add(Coin((pos_x, -height)))
 
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
         self.background.update(self.speed)
+        self.coins.update(self.speed)
+        self.obstacles.update(self.speed)
         self.player.update()
-
-        if len(self.obstacles) < self.speed // 2:
-            diff = self.speed // 2 - len(self.obstacles)
-            self.spawn_road_objects("obstacle", diff)
 
         if len(self.coins) < self.speed:
             diff = self.speed - len(self.coins)
             self.spawn_road_objects("coin", diff)
 
-        for coin in self.coins:
-            coin.update(self.speed)
+        if len(self.obstacles) < self.speed // 2:
+            diff = self.speed // 2 - len(self.obstacles)
+            self.spawn_road_objects("obstacle", diff)
 
+        for coin in self.coins:
             if coin.rect.top > HEIGHT:
-                index = self.coins.index(coin)
-                del self.coins[index]
+                self.coins.remove(coin)
 
         for obstacle in self.obstacles:
-            obstacle.update(self.speed)
-
             if obstacle.rect.top > HEIGHT:
-                index = self.obstacles.index(obstacle)
-                del self.obstacles[index]
+                self.obstacles.remove(obstacle)
 
-        if self.player.rect.collideobjects(self.obstacles):
+        if pygame.sprite.spritecollideany(self.player, self.obstacles):
             self.exit()
+
+        # Third argument specifies to remove any coins collected from the coin sprite group
+        pygame.sprite.spritecollide(self.player, self.coins, True)
 
         self.frame_count += 1
         # Each "speed level" duration is constantly increasing
@@ -139,13 +138,8 @@ class Game(View):
         self.screen.fill((255, 255, 255))
 
         self.background.draw(self.screen)
-
-        for coin in self.coins:
-            coin.draw(self.screen)
-
-        for obstacle in self.obstacles:
-            obstacle.draw(self.screen)
-
+        self.coins.draw(self.screen)
+        self.obstacles.draw(self.screen)
         self.player.draw(self.screen)
 
         pygame.display.flip()
