@@ -75,6 +75,8 @@ class Coin(GameObject):
         self.current_sprite = 0
         self.sprites = 4
 
+        # Set new rect to avoid using whole sprite sheet as rect
+        self.rect = pygame.rect.Rect(0, 0, 32, 32)
         self.rect.x = position[0]
         self.rect.y = position[1]
 
