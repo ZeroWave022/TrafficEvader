@@ -75,21 +75,26 @@ class Game(View):
 
     def spawn_road_objects(self, obj: Literal["obstacle", "coin"], amount: int) -> None:
         """Spawn multiple road objects (obstacles or coins)"""
-        obstacle_half_width = 32
-        coin_half_width = 16
+        lane_width = self.level["lane_width"]
+        distance_to_road = self.background.rect.left
+        obstacle_width = 64
+        coin_width = 32
+
         for _ in range(amount):
             lane = randint(1, self.level["lanes"]) # type: ignore
             height = randint(50, 400)
 
             # x coordinate:
-            # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 obstacle/coin width
+            # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 object width
+            pos_x = distance_to_road + 30 + lane*lane_width - (lane_width-10)//2 - 10 # type: ignore
+
             if obj == "obstacle":
-                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - obstacle_half_width # type: ignore
+                pos_x -= obstacle_width//2
                 self.obstacles.append(
                     Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
                 )
             elif obj == "coin":
-                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - coin_half_width # type: ignore
+                pos_x -= coin_width//2
                 self.coins.append(Coin((pos_x, -height)))
 
     def update(self) -> None:
@@ -100,7 +105,7 @@ class Game(View):
         if len(self.obstacles) < self.speed // 2:
             diff = self.speed // 2 - len(self.obstacles)
             self.spawn_road_objects("obstacle", diff)
-        
+
         if len(self.coins) < self.speed:
             diff = self.speed - len(self.coins)
             self.spawn_road_objects("coin", diff)
