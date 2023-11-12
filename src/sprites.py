@@ -4,15 +4,28 @@ from typing import Literal
 import pygame
 from config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
 
-
-class Player(pygame.sprite.Sprite):
-    """Class managing the player"""
-    def __init__(self, level: dict) -> None:
+class GameObject(pygame.sprite.Sprite):
+    def __init__(self, img_path: str, scale: float | tuple[int, int] | None = None) -> None:
         super().__init__()
 
-        self._raw_image = pygame.image.load("./sprites/blue_car.png").convert_alpha()
-        self.image = pygame.transform.scale_by(self._raw_image, 1.2)
+        self.image = pygame.image.load(img_path).convert_alpha()
+
+        if scale and isinstance(scale, float):
+            self.image = pygame.transform.scale_by(self.image, scale)
+        elif scale and isinstance(scale, tuple):
+            self.image = pygame.transform.scale(self.image, scale)
+
         self.rect = self.image.get_rect()
+
+    def draw(self, dest_surface: pygame.Surface):
+        """Draw this sprite onto dest_surface."""
+        return dest_surface.blit(self.image, self.rect)
+
+class Player(GameObject):
+    """Class managing the player"""
+    def __init__(self, level: dict) -> None:
+        super().__init__("./sprites/blue_car.png", 1.2)
+
         self.level_info = level
 
         self.rect.x = self.level_info["player"]["init_x"]
@@ -54,18 +67,9 @@ class Player(pygame.sprite.Sprite):
                 self.rect.centerx = self.moving_to
                 self.switching_lane = False
 
-    def draw(self, dest_surface: pygame.Surface):
-        """Draw this sprite onto dest_surface."""
-        return dest_surface.blit(self.image, self.rect)
-
-
-class Obstacle(pygame.sprite.Sprite):
+class Obstacle(GameObject):
     def __init__(self, img_path: str, position: tuple[int, int]):
-        super().__init__()
-
-        self._raw_image = pygame.image.load(img_path).convert_alpha()
-        self.image = pygame.transform.scale(self._raw_image, (64, 64))
-        self.rect = self.image.get_rect()
+        super().__init__(img_path, (64, 64))
 
         self.rect.x = position[0]
         self.rect.y = position[1]
@@ -74,19 +78,12 @@ class Obstacle(pygame.sprite.Sprite):
         """Move obstacle for new frame"""
         self.rect.y += speed
 
-    def draw(self, dest_surface: pygame.Surface):
-        """Draw this sprite onto dest_surface."""
-        return dest_surface.blit(self.image, self.rect)
-
-class Background(pygame.sprite.Sprite):
+class Background(GameObject):
     """Class managing game background"""
     def __init__(self, level: dict) -> None:
-        super().__init__()
+        super().__init__(f"./sprites/road_{level['lanes']}.png")
 
         self.level_info = level
-        self.image = pygame.image.load(f"./sprites/road_{self.level_info['lanes']}.png").convert()
-        self.rect = self.image.get_rect()
-
         self.rect.x = (WIDTH - self.rect.width) // 2
         self.rect.bottom = HEIGHT
 
@@ -101,7 +98,6 @@ class Background(pygame.sprite.Sprite):
         self.rect.y += speed
 
     def draw(self, dest_surface: pygame.Surface):
-        """Draw this sprite onto dest_surface."""
         second_bg = self.rect.copy()
         second_bg.y -= second_bg.height
 
