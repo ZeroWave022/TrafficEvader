@@ -1,9 +1,10 @@
 """Traffic Evader views"""
 
 import sys
-import pygame
 from random import randint
-from sprites import Player, Background, Obstacle
+import pygame
+from typing import Literal
+from sprites import Player, Background, Coin, Obstacle
 from ui import Button
 from managers import FontManager
 from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED, LEVELS
@@ -52,6 +53,7 @@ class Game(View):
         self.level = LEVELS[difficulty_name]
         self.player = Player(self.level)
         self.background = Background(self.level)
+        self.coins: list[Coin] = []
         self.obstacles: list[Obstacle] = []
 
         self.frame_count = 0
@@ -71,6 +73,25 @@ class Game(View):
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.player.move_right()
 
+    def spawn_road_objects(self, obj: Literal["obstacle", "coin"], amount: int) -> None:
+        """Spawn multiple road objects (obstacles or coins)"""
+        obstacle_half_width = 32
+        coin_half_width = 16
+        for _ in range(amount):
+            lane = randint(1, self.level["lanes"]) # type: ignore
+            height = randint(50, 400)
+
+            # x coordinate:
+            # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 obstacle/coin width
+            if obj == "obstacle":
+                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - obstacle_half_width # type: ignore
+                self.obstacles.append(
+                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
+                )
+            elif obj == "coin":
+                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - coin_half_width # type: ignore
+                self.coins.append(Coin((pos_x, -height)))
+
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
         self.background.update(self.speed)
@@ -78,16 +99,18 @@ class Game(View):
 
         if len(self.obstacles) < self.speed // 2:
             diff = self.speed // 2 - len(self.obstacles)
-            for _ in range(diff):
-                lane = randint(1, self.level["lanes"]) # type: ignore
-                height = randint(50, 400)
-                # x coordinate:
-                # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 obstacle width
-                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - 32 #type: ignore
+            self.spawn_road_objects("obstacle", diff)
+        
+        if len(self.coins) < self.speed:
+            diff = self.speed - len(self.coins)
+            self.spawn_road_objects("coin", diff)
 
-                self.obstacles.append(
-                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
-                )
+        for coin in self.coins:
+            coin.update(self.speed)
+
+            if coin.rect.top > HEIGHT:
+                index = self.coins.index(coin)
+                del self.coins[index]
 
         for obstacle in self.obstacles:
             obstacle.update(self.speed)
@@ -111,6 +134,9 @@ class Game(View):
         self.screen.fill((255, 255, 255))
 
         self.background.draw(self.screen)
+
+        for coin in self.coins:
+            coin.draw(self.screen)
 
         for obstacle in self.obstacles:
             obstacle.draw(self.screen)

@@ -67,6 +67,34 @@ class Player(GameObject):
                 self.rect.centerx = self.moving_to
                 self.switching_lane = False
 
+class Coin(GameObject):
+    def __init__(self, position: tuple[int, int]) -> None:
+        super().__init__("./sprites/coin.png", (160, 32))
+
+        self.frame_counter = 0
+        self.current_sprite = 0
+        self.sprites = 4
+
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def update(self, speed: int):
+        self.frame_counter += 1
+
+        if self.frame_counter >= 8:
+            if self.current_sprite + 1 >= self.sprites:
+                self.current_sprite = 0
+            else:
+                self.current_sprite += 1
+
+            self.frame_counter = 0
+        
+        self.rect.y += speed
+
+    def draw(self, dest_surface: pygame.Surface):
+        # Move the area (third argument) based on the next coin sprite to be shown
+        return dest_surface.blit(self.image, self.rect, (self.current_sprite*32, 0, 32, 32))
+
 class Obstacle(GameObject):
     def __init__(self, img_path: str, position: tuple[int, int]):
         super().__init__(img_path, (64, 64))
