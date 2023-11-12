@@ -17,7 +17,7 @@ LEVELS = {
     },
     "normal": {
         "lanes": 4,
-        "lane_width": 115,
+        "lane_width": 112,
         "player": {
             "init_x": WIDTH // 2 - 95,
             "init_lane": 2

@@ -59,6 +59,25 @@ class Player(pygame.sprite.Sprite):
         return dest_surface.blit(self.image, self.rect)
 
 
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self, img_path: str, position: tuple[int, int]):
+        super().__init__()
+
+        self._raw_image = pygame.image.load(img_path).convert_alpha()
+        self.image = pygame.transform.scale(self._raw_image, (64, 64))
+        self.rect = self.image.get_rect()
+
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def update(self, speed: int):
+        """Move obstacle for new frame"""
+        self.rect.y += speed
+
+    def draw(self, dest_surface: pygame.Surface):
+        """Draw this sprite onto dest_surface."""
+        return dest_surface.blit(self.image, self.rect)
+
 class Background(pygame.sprite.Sprite):
     """Class managing game background"""
     def __init__(self, level: dict) -> None:

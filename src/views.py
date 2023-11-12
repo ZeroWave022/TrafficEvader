@@ -2,7 +2,8 @@
 
 import sys
 import pygame
-from sprites import Player, Background
+from random import randint
+from sprites import Player, Background, Obstacle
 from ui import Button
 from managers import FontManager
 from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED, LEVELS
@@ -51,8 +52,7 @@ class Game(View):
         self.level = LEVELS[difficulty_name]
         self.player = Player(self.level)
         self.background = Background(self.level)
-        self.player = Player((WIDTH // 2 - 95, 400))
-        self.background = Background()
+        self.obstacles: list[Obstacle] = []
 
         self.frame_count = 0
         self.speed = INITIAL_SPEED
@@ -76,6 +76,29 @@ class Game(View):
         self.background.update(self.speed)
         self.player.update()
 
+        if len(self.obstacles) < self.speed // 2:
+            diff = self.speed // 2 - len(self.obstacles)
+            for _ in range(diff):
+                lane = randint(1, self.level["lanes"]) # type: ignore
+                height = randint(50, 400)
+                # x coordinate:
+                # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 obstacle width
+                pos_x = self.background.rect.left + 30 + lane*self.level["lane_width"] - (self.level["lane_width"]-10)//2 - 10 - 32 #type: ignore
+
+                self.obstacles.append(
+                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
+                )
+
+        for obstacle in self.obstacles:
+            obstacle.update(self.speed)
+
+            if obstacle.rect.top > HEIGHT:
+                index = self.obstacles.index(obstacle)
+                del self.obstacles[index]
+
+        if self.player.rect.collideobjects(self.obstacles):
+            self.exit()
+
         self.frame_count += 1
         # Each "speed level" duration is constantly increasing
         # (speed is 2 for 1200 frames, speed is 5 for 6000 frames, etc)
@@ -88,6 +111,10 @@ class Game(View):
         self.screen.fill((255, 255, 255))
 
         self.background.draw(self.screen)
+
+        for obstacle in self.obstacles:
+            obstacle.draw(self.screen)
+
         self.player.draw(self.screen)
 
         pygame.display.flip()
