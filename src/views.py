@@ -73,6 +73,21 @@ class Game(View):
         elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.player.move_right()
 
+    def road_position_free(self, lane: int, new_rect: pygame.Rect):
+        """Check if a position on the road,
+        specified by lane and the rectangle of the object about to be spawned,
+        isn't occupied by any other objects.
+        This is to avoid layered objects on top of each other.
+        Returns true if free, false otherwise."""
+
+        obstacles_on_same_lane = [o.rect for o in self.obstacles if o.lane == lane]
+        coins_on_same_lane = [c.rect for c in self.coins if c.lane == lane]
+
+        if new_rect.collidelist(obstacles_on_same_lane) != -1 or new_rect.collidelist(coins_on_same_lane) != -1:
+            return False
+
+        return True
+
     def spawn_road_objects(self, obj: Literal["obstacle", "coin"], amount: int) -> None:
         """Spawn multiple road objects (obstacles or coins)"""
         lane_width = self.level["lane_width"]
@@ -90,12 +105,26 @@ class Game(View):
 
             if obj == "obstacle":
                 pos_x -= obstacle_width//2
+                new_rect = pygame.rect.Rect((pos_x, -height, 64, 64))
+
+                # If the position on the road isn't free, re-randomize the height
+                while not self.road_position_free(lane, new_rect):
+                    height = randint(50, 400)
+                    new_rect.y = -height
+
                 self.obstacles.add(
-                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height))
+                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height), lane)
                 )
             elif obj == "coin":
                 pos_x -= coin_width//2
-                self.coins.add(Coin((pos_x, -height)))
+
+                new_rect = pygame.rect.Rect((pos_x, -height, 32, 32))
+
+                while not self.road_position_free(lane, new_rect):
+                    height = randint(50, 400)
+                    new_rect.y = -height
+
+                self.coins.add(Coin((pos_x, -height), lane))
 
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""

@@ -68,7 +68,7 @@ class Player(GameObject):
                 self.switching_lane = False
 
 class Coin(GameObject):
-    def __init__(self, position: tuple[int, int]) -> None:
+    def __init__(self, position: tuple[int, int], lane: int) -> None:
         super().__init__("./sprites/coin.png", (160, 32))
 
         # self.image and self.rect will be overwritten with coin used from the sprite sheet
@@ -84,6 +84,7 @@ class Coin(GameObject):
         self.rect = self.image.get_rect()
         self.image.blit(self.sheet_img, (0, 0), self.rect)
 
+        self.lane = lane
         self.rect.x = position[0]
         self.rect.y = position[1]
 
@@ -105,11 +106,12 @@ class Coin(GameObject):
         self.rect.y += speed
 
 class Obstacle(GameObject):
-    def __init__(self, img_path: str, position: tuple[int, int]):
+    def __init__(self, img_path: str, position: tuple[int, int], lane: int):
         super().__init__(img_path, (64, 64))
 
         self.rect.x = position[0]
         self.rect.y = position[1]
+        self.lane = lane
 
     def update(self, speed: int):
         """Move obstacle for new frame"""
