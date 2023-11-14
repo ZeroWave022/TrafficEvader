@@ -5,7 +5,7 @@ from random import randint
 from typing import Literal
 import pygame
 from sprites import Player, Background, Coin, Obstacle
-from ui import Button
+from ui import Button, SelectableItem, ItemSelector
 from managers import FontManager
 from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED, LEVELS
 
@@ -200,6 +200,10 @@ class Menu(View):
             self.active = False
             self.transition_to = Game("normal")
 
+        if self.settings.clicked:
+            self.active = False
+            self.transition_to = Settings()
+
         if self.exit_btn.clicked:
             self.exit()
 
@@ -210,5 +214,33 @@ class Menu(View):
             button.draw(self.screen)
 
         self.screen.blit(self.title, ((WIDTH - self.title.get_width()) // 2, HEIGHT - 450))
+
+        pygame.display.flip()
+
+class Settings(View):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.cars = [[
+            SelectableItem("./sprites/blue_car.png", (80, 80)),
+            SelectableItem("./sprites/blue_car.png", (80, 80)),
+            SelectableItem("./sprites/blue_car.png", (80, 80)),
+            SelectableItem("./sprites/blue_car.png", (80, 80)),
+        ]]
+
+        self.car_selector = ItemSelector(self.cars, (0, 1))
+
+    def process_input(self) -> None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self.car_selector.process_input(mouse_pos)
+
+    def render(self):
+        self.screen.fill((255, 255, 255))
+
+        self.car_selector.draw(self.screen)
 
         pygame.display.flip()
