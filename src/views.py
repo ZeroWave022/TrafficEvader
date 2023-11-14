@@ -181,9 +181,9 @@ class GameOver(View):
         self.fonts = FontManager()
         self.text = self.fonts.font_title.render("Game Over", True, "black", (255, 255, 255))
 
-        self.retry = Button((WIDTH // 2 - 75, HEIGHT // 2 - 120, 150, 50), text="Retry")
-        self.back = Button((WIDTH // 2 - 75, HEIGHT // 2 - 60, 150, 50), text="Back to Menu")
-        self.exit_btn = Button((WIDTH // 2 - 75, HEIGHT // 2, 150, 50), text="Exit")
+        self.retry = Button((WIDTH // 2 - 110, HEIGHT // 2 - 120, 220, 50), text="Retry")
+        self.back = Button((WIDTH // 2 - 110, HEIGHT // 2 - 60, 220, 50), text="Back to Menu")
+        self.exit_btn = Button((WIDTH // 2 - 110, HEIGHT // 2, 220, 50), text="Exit")
 
         self.buttons = [self.retry, self.back, self.exit_btn]
 
