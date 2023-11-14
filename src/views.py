@@ -149,11 +149,11 @@ class Game(View):
             if obstacle.rect.top > HEIGHT:
                 self.obstacles.remove(obstacle)
 
-        if pygame.sprite.spritecollideany(self.player, self.obstacles):
+        if pygame.sprite.spritecollideany(self.player, self.obstacles, pygame.sprite.collide_mask):
             self.exit()
 
         # Third argument specifies to remove any coins collected from the coin sprite group
-        pygame.sprite.spritecollide(self.player, self.coins, True)
+        pygame.sprite.spritecollide(self.player, self.coins, True, pygame.sprite.collide_mask)
 
         self.frame_count += 1
         # Each "speed level" duration is constantly increasing

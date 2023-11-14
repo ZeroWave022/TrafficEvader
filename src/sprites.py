@@ -16,6 +16,7 @@ class GameObject(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, scale)
 
         self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
 
     def draw(self, dest_surface: pygame.Surface):
         """Draw this sprite onto dest_surface."""
@@ -83,6 +84,9 @@ class Coin(GameObject):
         self.image = pygame.surface.Surface((32, 32), pygame.SRCALPHA).convert_alpha()
         self.rect = self.image.get_rect()
         self.image.blit(self.sheet_img, (0, 0), self.rect)
+
+        # Overwrite mask to use correct surface instead of whole spritesheet
+        self.mask = pygame.mask.from_surface(self.image)
 
         self.lane = lane
         self.rect.x = position[0]
