@@ -1,8 +1,8 @@
 """Traffic Evader. A game made with pygame"""
 
 import pygame
-from views import Menu
-from managers import ViewManager
+from src.views.menu import Menu
+from src.managers import ViewManager
 
 
 if __name__ == "__main__":

@@ -1,18 +1,14 @@
 """Game managers for Traffic Evader"""
 
-from __future__ import annotations
-from typing import TYPE_CHECKING
 import sys
 import pygame
-
-if TYPE_CHECKING:
-    from views import View
+from src.views import View
 
 class FontManager():
     """Class storing game fonts"""
     def __init__(self) -> None:
-        self.font_title = pygame.font.Font("./fonts/PublicPixel.woff", 38)
-        self.font_button = pygame.font.Font("./fonts/PublicPixel.woff", 16)
+        self.font_title = pygame.font.Font("./src/fonts/PublicPixel.woff", 38)
+        self.font_button = pygame.font.Font("./src/fonts/PublicPixel.woff", 16)
 
 class ViewManager():
     """A class managing what view is displayed.

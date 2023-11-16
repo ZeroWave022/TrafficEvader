@@ -1,6 +1,8 @@
-import pygame
-from managers import FontManager
+"""UI elements for Traffic Evader"""
+
 from typing import Optional
+import pygame
+from src.managers import FontManager
 
 class Button:
     def __init__(

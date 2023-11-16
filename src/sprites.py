@@ -2,7 +2,7 @@
 
 from typing import Literal
 import pygame
-from config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
+from src.config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
 
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, img_path: str, scale: float | tuple[int, int] | None = None) -> None:
@@ -70,7 +70,7 @@ class Player(GameObject):
 
 class Coin(GameObject):
     def __init__(self, position: tuple[int, int], lane: int) -> None:
-        super().__init__("./sprites/coin.png", (160, 32))
+        super().__init__("./src/sprites/coin.png", (160, 32))
 
         # self.image and self.rect will be overwritten with coin used from the sprite sheet
         self.sheet_img = self.image
@@ -124,7 +124,7 @@ class Obstacle(GameObject):
 class Background(GameObject):
     """Class managing game background"""
     def __init__(self, level: dict) -> None:
-        super().__init__(f"./sprites/road_{level['lanes']}.png")
+        super().__init__(f"./src/sprites/road_{level['lanes']}.png")
 
         self.level_info = level
         self.rect.x = (WIDTH - self.rect.width) // 2
