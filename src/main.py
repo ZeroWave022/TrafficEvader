@@ -4,12 +4,15 @@ import sys
 import pygame
 from views import View, Menu
 
-class ViewManager():
-    """A class managing what view is displayed"""
-    def __init__(self, init_view: View) -> None:
-        self.current_view = init_view
 
-        self.show_view(init_view)
+class ViewManager():
+    """A class managing what view is displayed.
+    The constructor needs a non-instantiated View class which will be the first view shown."""
+    def __init__(self, init_view: type[View]) -> None:
+        self.state = {}
+        self.current_view = init_view(self.state)
+
+        self.show_view(self.current_view)
 
     def show_view(self, view: View) -> None:
         """Display a view.
@@ -24,4 +27,4 @@ class ViewManager():
 
 if __name__ == "__main__":
     pygame.init()
-    ViewManager(Menu())
+    ViewManager(Menu)

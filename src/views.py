@@ -11,11 +11,12 @@ from config import WIDTH, HEIGHT, FPS, INITIAL_SPEED, LEVELS
 
 class View():
     """A base class for all game views with a game loop"""
-    def __init__(self) -> None:
+    def __init__(self, state: dict) -> None:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.active = True
         self.transition_to: View | None = None
+        self.state = state
 
     def process_input(self) -> None:
         """Game loop part 1: Process game inputs.
@@ -46,8 +47,8 @@ class View():
 
 class Game(View):
     """Main game view class"""
-    def __init__(self, difficulty_name: str) -> None:
-        super().__init__()
+    def __init__(self, state: dict, difficulty_name: str) -> None:
+        super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
 
         self.level = LEVELS[difficulty_name]
@@ -151,7 +152,7 @@ class Game(View):
 
         if pygame.sprite.spritecollideany(self.player, self.obstacles, pygame.sprite.collide_mask):
             self.active = False
-            self.transition_to = GameOver()
+            self.transition_to = GameOver(self.state)
 
         # Third argument specifies to remove any coins collected from the coin sprite group
         pygame.sprite.spritecollide(self.player, self.coins, True, pygame.sprite.collide_mask)
@@ -175,8 +176,8 @@ class Game(View):
         pygame.display.flip()
 
 class GameOver(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, state: dict) -> None:
+        super().__init__(state)
 
         self.fonts = FontManager()
         self.text = self.fonts.font_title.render("Game Over", True, "black", (255, 255, 255))
@@ -203,10 +204,10 @@ class GameOver(View):
             self.active = False
 
         if self.retry.clicked:
-            self.transition_to = Game("normal")
+            self.transition_to = Game(self.state, "normal")
 
         if self.back.clicked:
-            self.transition_to = Menu()
+            self.transition_to = Menu(self.state)
 
         if self.exit_btn.clicked:
             self.exit()
@@ -225,8 +226,8 @@ class GameOver(View):
 
 class Menu(View):
     """Main menu view class"""
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, state: dict) -> None:
+        super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
 
         self.fonts = FontManager()
@@ -248,11 +249,11 @@ class Menu(View):
 
         if self.play.clicked:
             self.active = False
-            self.transition_to = Game("normal")
+            self.transition_to = Game(self.state, "normal")
 
         if self.settings.clicked:
             self.active = False
-            self.transition_to = Settings()
+            self.transition_to = Settings(self.state)
 
         if self.exit_btn.clicked:
             self.exit()
@@ -268,8 +269,8 @@ class Menu(View):
         pygame.display.flip()
 
 class Settings(View):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, state: dict) -> None:
+        super().__init__(state)
 
         self.cars = [[
             SelectableItem("./sprites/blue_car.png", (80, 80)),
