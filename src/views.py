@@ -2,7 +2,7 @@
 
 import sys
 from random import randint
-from typing import Literal, Optional
+from typing import Literal
 import pygame
 from sprites import Player, Background, Coin, Obstacle
 from ui import Button, SelectableItem, ItemSelector
