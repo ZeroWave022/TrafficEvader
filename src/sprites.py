@@ -1,6 +1,6 @@
 """Sprites for Traffic Evader"""
 
-from typing import Literal, Optional
+from typing import Literal
 import pygame
 from config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
 

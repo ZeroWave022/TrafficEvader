@@ -33,12 +33,26 @@ class Button:
 
 class SelectableItem():
     """An item which can be chosen by clicking on it."""
-    def __init__(self, img_path: str, size: tuple[int, int] = (100, 100)) -> None:
+    def __init__(
+            self,
+            item_id: str,
+            img_path: Optional[str] = None,
+            button_text: Optional[str] = None,
+            size: tuple[int, int] = (100, 100)
+        ) -> None:
+        self.item_id = item_id
         self.image = pygame.surface.Surface(size, pygame.SRCALPHA)
         self.rect = self.image.get_rect()
 
-        self.item_img = pygame.image.load(img_path).convert_alpha()
-        self.item_img = pygame.transform.scale(self.item_img, (size[0] * 0.8, size[0] * 0.8))
+        if img_path:
+            self.item_img = pygame.image.load(img_path).convert_alpha()
+            self.item_img = pygame.transform.scale(self.item_img, (size[0] * 0.8, size[0] * 0.8))
+        elif button_text:
+            self.item_img = FontManager().font_button.render(button_text, True, "black")
+        else:
+            raise TypeError(
+                "Either img_path or button_text must be provided when instantiating SelectableItem"
+            )
 
         self.item_rect = self.item_img.get_rect(center=self.rect.center)
 
@@ -88,14 +102,26 @@ class ItemSelector():
                 x_pos += self.items_width + 50
 
             row_y += self.items_height + 25
-    
+
+    def get_active_item_index(self):
+        for row_id, row in enumerate(self.rows):
+            currently_selected = next((i for i in row if i == self.active_item), None)
+            if currently_selected is not None:
+                return (row_id, row.index(currently_selected))
+
+        raise RuntimeError("Index of active item in ItemSelector could not be found")
+
     def process_input(self, position: tuple[int, int]) -> None:
         if not self.rect.collidepoint(position):
             return
 
+        # Find relative coordinates where the user clicked inside the ItemSelector surface
+        relative_x = position[0] - self.rect.x
+        relative_y = position[1] - self.rect.y
+
         for row in self.rows:
             for item in row:
-                if item.rect.collidepoint(position):
+                if item.rect.collidepoint(relative_x, relative_y):
                     self.active_item = item
                     break
 

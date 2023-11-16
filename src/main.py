@@ -9,7 +9,12 @@ class ViewManager():
     """A class managing what view is displayed.
     The constructor needs a non-instantiated View class which will be the first view shown."""
     def __init__(self, init_view: type[View]) -> None:
-        self.state = {}
+        self.state = {
+            "difficulty": "normal",
+            "difficulty_index": (0, 0),
+            "car": "blue_car",
+            "car_index": (0, 0)
+        }
         self.current_view = init_view(self.state)
 
         self.show_view(self.current_view)
