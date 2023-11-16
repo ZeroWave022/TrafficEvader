@@ -1,6 +1,6 @@
 """Sprites for Traffic Evader"""
 
-from typing import Literal
+from typing import Literal, Optional
 import pygame
 from config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
 
@@ -24,8 +24,8 @@ class GameObject(pygame.sprite.Sprite):
 
 class Player(GameObject):
     """Class managing the player"""
-    def __init__(self, level: dict) -> None:
-        super().__init__("./sprites/blue_car.png", 1.2)
+    def __init__(self, img_path: str, level: dict) -> None:
+        super().__init__(img_path, (75, 75))
 
         self.level_info = level
 

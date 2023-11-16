@@ -52,7 +52,7 @@ class Game(View):
         pygame.display.set_caption("Traffic Evader")
 
         self.level = LEVELS[difficulty_name]
-        self.player = Player(self.level)
+        self.player = Player("./sprites/cars/blue_car.png", self.level)
         self.background = Background(self.level)
         self.coins: pygame.sprite.Group[Coin] = pygame.sprite.Group()
         self.obstacles: pygame.sprite.Group[Obstacle] = pygame.sprite.Group()
@@ -101,7 +101,7 @@ class Game(View):
                     new_rect.y = -height
 
                 self.obstacles.add(
-                    Obstacle("./sprites/toyota-prius-front.png", (pos_x, -height), lane)
+                    Obstacle("./sprites/obstacles/toyota-prius-front.png", (pos_x, -height), lane)
                 )
             elif obj == "coin":
                 pos_x -= coin_width//2
