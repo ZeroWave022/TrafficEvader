@@ -6,7 +6,7 @@ import pygame
 from src.views.view import View
 from src.sprites import Player, Background, Coin, Obstacle
 from src.managers import FontManager
-from src.config import HEIGHT, INITIAL_SPEED, LEVELS
+from src.config import WIDTH, HEIGHT, INITIAL_SPEED, LEVELS
 
 import src.views.gameover as gameover
 
@@ -16,15 +16,17 @@ class Game(View):
         super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
 
+        self.fonts = FontManager()
         self.level = LEVELS[self.state["difficulty"]]
         self.player = Player(f"./src/sprites/cars/{self.state['car']}.png", self.level)
         self.background = Background(self.level)
         self.coins: pygame.sprite.Group[Coin] = pygame.sprite.Group()
         self.obstacles: pygame.sprite.Group[Obstacle] = pygame.sprite.Group()
+        self.score_text = self.fonts.font_score.render("0", True, "black")
 
         self.frame_count = 0
         self.speed = INITIAL_SPEED
-        self.fonts = FontManager()
+        self.score = 0
 
     def road_position_free(self, lane: int, new_rect: pygame.Rect):
         """Check if a position on the road,
@@ -120,7 +122,10 @@ class Game(View):
             self.transition_to = gameover.GameOver(self.state)
 
         # Third argument specifies to remove any coins collected from the coin sprite group
-        pygame.sprite.spritecollide(self.player, self.coins, True, pygame.sprite.collide_mask)
+        coins_collected = pygame.sprite.spritecollide(self.player, self.coins, True, pygame.sprite.collide_mask)
+        self.score += len(coins_collected)
+
+        self.score_text = self.fonts.font_score.render(str(self.score), True, "black")
 
         self.frame_count += 1
         # Each "speed level" duration is constantly increasing
@@ -137,5 +142,6 @@ class Game(View):
         self.coins.draw(self.screen)
         self.obstacles.draw(self.screen)
         self.player.draw(self.screen)
+        self.screen.blit(self.score_text, (WIDTH - 100, 25))
 
         pygame.display.flip()
