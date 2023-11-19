@@ -4,7 +4,7 @@ from random import randint
 from typing import Literal
 import pygame
 from src.views.view import View
-from src.sprites import Player, Background, Coin, Obstacle
+from src.sprites import Player, Background, Coin, Obstacle, Explosion
 from src.managers import FontManager
 from src.config import WIDTH, HEIGHT, INITIAL_SPEED, LEVELS
 
@@ -27,6 +27,9 @@ class Game(View):
         self.frame_count = 0
         self.speed = INITIAL_SPEED
         self.score = 0
+
+        self.explosion = Explosion()
+        self.exploding = False
 
     def road_position_free(self, lane: int, new_rect: pygame.Rect):
         """Check if a position on the road,
@@ -96,6 +99,12 @@ class Game(View):
 
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
+        if self.exploding:
+            self.explosion.update()
+            if self.explosion.animation_finished:
+                self.active = False
+            return
+
         self.background.update(self.speed)
         self.coins.update(self.speed)
         self.obstacles.update(self.speed)
@@ -117,8 +126,26 @@ class Game(View):
             if obstacle.rect.top > HEIGHT:
                 self.obstacles.remove(obstacle)
 
-        if pygame.sprite.spritecollideany(self.player, self.obstacles, pygame.sprite.collide_mask):
-            self.active = False
+        collided = pygame.sprite.spritecollideany(self.player, self.obstacles, pygame.sprite.collide_mask)
+
+        if collided:
+            self.exploding = True
+            overlap_pos = list(
+                self.player.mask.overlap(
+                    collided.mask,
+                    (collided.rect.x - self.player.rect.x, collided.rect.y - self.player.rect.y)
+                )
+            )
+            # Collisions which are (nearly) head-on, should have it's explosion center at midtop of car
+            # Needs to be checked, because otherwise overlap()'s first point is used
+            # (usually top left, as the function checks for collisions iterably in the mask)
+            if overlap_pos[1] < 10:
+                self.explosion.rect.center = self.player.rect.midtop
+            else:
+                overlap_pos[0] += self.player.rect.x
+                overlap_pos[1] += self.player.rect.y
+                self.explosion.rect.centerx = overlap_pos[0]
+                self.explosion.rect.centery = overlap_pos[1]
             self.transition_to = gameover.GameOver(self.state)
 
         # Third argument specifies to remove any coins collected from the coin sprite group
@@ -143,5 +170,8 @@ class Game(View):
         self.obstacles.draw(self.screen)
         self.player.draw(self.screen)
         self.screen.blit(self.score_text, (WIDTH - 100, 25))
+
+        if self.exploding:
+            self.explosion.draw(self.screen)
 
         pygame.display.flip()
