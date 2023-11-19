@@ -7,7 +7,11 @@ from src.config import WIDTH, HEIGHT, FPS
 class View():
     """A base class for all game views with a game loop"""
     def __init__(self, state: dict) -> None:
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        if pygame.display.get_active():
+            self.screen = pygame.display.get_surface()
+        else:
+            self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
         self.clock = pygame.time.Clock()
         self.active = True
         self.transition_to: View | None = None
