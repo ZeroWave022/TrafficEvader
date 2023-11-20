@@ -1,8 +1,9 @@
 """Sprites for Traffic Evader"""
 
+from random import randint, choice
 from typing import Literal
 import pygame
-from src.config import WIDTH, HEIGHT, LANE_SWITCH_SPEED
+from src.config import WIDTH, HEIGHT, LANE_SWITCH_SPEED, CARS_OBSTACLES
 
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, img_path: str, scale: float | tuple[int, int] | None = None) -> None:
@@ -110,12 +111,24 @@ class Coin(GameObject):
         self.rect.y += speed
 
 class Obstacle(GameObject):
-    def __init__(self, img_path: str, position: tuple[int, int], lane: int):
-        super().__init__(img_path, (64, 64))
+    def __init__(self, position: tuple[int, int], lane: int):
+        self.img_path = self.select_random_car()
+        super().__init__(self.img_path, (64, 64))
 
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.lane = lane
+
+    def select_random_car(self) -> str:
+        rand = randint(1, 100)
+        obstacles_path = "./src/sprites/obstacles/"
+
+        if rand <= 60:
+            return obstacles_path + choice(CARS_OBSTACLES["low"])
+        if rand <= 97:
+            return obstacles_path + choice(CARS_OBSTACLES["medium"])
+
+        return obstacles_path + choice(CARS_OBSTACLES["high"])
 
     def update(self, speed: int):
         """Move obstacle for new frame"""

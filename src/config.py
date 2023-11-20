@@ -32,3 +32,30 @@ LEVELS = {
         }
     }
 }
+
+CARS_OBSTACLES = {
+    "low": [
+        "chrysler-pt-cruiser-gt.png",
+        "fiat-multipla.png",
+        "lada-1200-vaz-2101.png",
+        "peugeot-307.png",
+        "pontiac-aztek.png",
+        "renault-kadjar.png",
+        "toyota-prius.png",
+    ],
+    "medium": [
+        "aston-martin-vantage.png",
+        "bmw-1-series.png",
+        "bmw-m3.png",
+        "chevrolet-camaro.png",
+        "mercedes-amg-gt-r.png",
+        "rolls-royce-spectre.png",
+    ],
+    "high": [
+        "bugatti-chiron.png",
+        "ferrari-daytona-sp3.png",
+        "lamborghini-aventador-svj.png",
+        "lexus-lfa.png",
+        "porsche-911-gt3-rs.png"
+    ]
+}

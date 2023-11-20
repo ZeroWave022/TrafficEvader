@@ -71,7 +71,7 @@ class Game(View):
                     new_rect.y = -height
 
                 self.obstacles.add(
-                    Obstacle("./src/sprites/obstacles/toyota-prius-front.png", (pos_x, -height), lane)
+                    Obstacle((pos_x, -height), lane)
                 )
             elif obj == "coin":
                 pos_x -= coin_width//2
