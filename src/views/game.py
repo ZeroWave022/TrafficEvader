@@ -67,7 +67,7 @@ class Game(View):
 
                 # If the position on the road isn't free, re-randomize the height
                 while not self.road_position_free(lane, new_rect):
-                    height = randint(50, 400)
+                    height = randint(50, self.speed * 100)
                     new_rect.y = -height
 
                 self.obstacles.add(
@@ -75,11 +75,10 @@ class Game(View):
                 )
             elif obj == "coin":
                 pos_x -= coin_width//2
-
                 new_rect = pygame.rect.Rect((pos_x, -height, 32, 32))
 
                 while not self.road_position_free(lane, new_rect):
-                    height = randint(50, 400)
+                    height = randint(50, self.speed * 100)
                     new_rect.y = -height
 
                 self.coins.add(Coin((pos_x, -height), lane))
@@ -99,6 +98,8 @@ class Game(View):
 
     def update(self) -> None:
         """Update: Move sprites, change state variables, etc"""
+        # Special state: While explosion is happening,
+        # (before moving to game over screen), no other updates are executed
         if self.exploding:
             self.explosion.update()
             if self.explosion.animation_finished:
@@ -112,11 +113,17 @@ class Game(View):
 
         if len(self.coins) < self.speed:
             diff = self.speed - len(self.coins)
-            self.spawn_road_objects("coin", diff)
+            if diff < 3:
+                self.spawn_road_objects("coin", diff)
+            else:
+                self.spawn_road_objects("coin", 3)
 
         if len(self.obstacles) < self.speed // 2:
             diff = self.speed // 2 - len(self.obstacles)
-            self.spawn_road_objects("obstacle", diff)
+            if diff < 3:
+                self.spawn_road_objects("obstacle", diff)
+            else:
+                self.spawn_road_objects("obstacle", 3)
 
         for coin in self.coins:
             if coin.rect.top > HEIGHT:
