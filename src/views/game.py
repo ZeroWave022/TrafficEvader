@@ -5,7 +5,7 @@ from typing import Literal
 import pygame
 from src.views.view import View
 from src.sprites import Player, Background, Coin, Obstacle, Explosion
-from src.managers import FontManager
+from src.managers import FontManager, SoundManager
 from src.config import WIDTH, HEIGHT, INITIAL_SPEED, LEVELS
 
 import src.views.gameover as gameover
@@ -17,6 +17,7 @@ class Game(View):
         pygame.display.set_caption("Traffic Evader")
 
         self.fonts = FontManager()
+        self.sounds = SoundManager()
         self.level = LEVELS[self.state["difficulty"]]
         self.player = Player(f"./src/sprites/cars/{self.state['car']}.png", self.level)
         self.background = Background(self.level)
@@ -137,6 +138,7 @@ class Game(View):
 
         if collided:
             self.exploding = True
+            self.sounds.explosion.play()
             overlap_pos = list(
                 self.player.mask.overlap(
                     collided.mask,
@@ -158,6 +160,8 @@ class Game(View):
         # Third argument specifies to remove any coins collected from the coin sprite group
         coins_collected = pygame.sprite.spritecollide(self.player, self.coins, True, pygame.sprite.collide_mask)
         self.score += len(coins_collected)
+        if len(coins_collected) > 0 and self.score % 10 == 0:
+            self.sounds.coin.play()
 
         self.score_text = self.fonts.font_score.render(str(self.score), True, "black")
 

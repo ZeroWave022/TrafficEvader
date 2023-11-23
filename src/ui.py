@@ -2,7 +2,7 @@
 
 from typing import Optional
 import pygame
-from src.managers import FontManager
+from src.managers import FontManager, SoundManager
 
 class Button:
     def __init__(
@@ -16,6 +16,7 @@ class Button:
         self.clicked = False
         self.text = text
         self.fonts = FontManager()
+        self.sounds = SoundManager()
 
     def click_event(self):
         """Handles a click event in game loop iteration.
@@ -24,6 +25,7 @@ class Button:
 
         if self.rect.collidepoint(mouse_position):
             self.clicked = True
+            self.sounds.click.play()
 
     def draw(self, dest_surface: pygame.Surface):
         """Draw this button onto dest_surface."""
@@ -91,6 +93,7 @@ class ItemSelector():
         self.rect = self.image.get_rect()
 
         self.active_item = self.rows[init_active[0]][init_active[1]]
+        self.sounds = SoundManager()
 
         self.set_item_positions()
 
@@ -124,9 +127,12 @@ class ItemSelector():
         for row in self.rows:
             for item in row:
                 if item.rect.collidepoint(relative_x, relative_y):
-                    self.active_item = item
+                    if self.active_item == item:
+                        self.sounds.click_deny.play()
+                    else:
+                        self.active_item = item
+                        self.sounds.click.play()
                     break
-
 
     def draw(self, dest_surface: pygame.Surface):
         self.image.fill((0, 0, 0, 0))

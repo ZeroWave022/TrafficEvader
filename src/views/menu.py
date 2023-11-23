@@ -3,7 +3,7 @@
 import pygame
 from src.views.view import View
 from src.ui import Button
-from src.managers import FontManager
+from src.managers import FontManager, SoundManager
 from src.config import WIDTH, HEIGHT
 
 import src.views.game as game
@@ -16,6 +16,7 @@ class Menu(View):
         pygame.display.set_caption("Traffic Evader")
 
         self.fonts = FontManager()
+        self.sounds = SoundManager()
         self.title = self.fonts.font_title.render("Traffic Evader", True, "black")
 
         self.play = Button((WIDTH // 2 - 75, HEIGHT - 350, 150, 50), text="Play")
@@ -33,10 +34,12 @@ class Menu(View):
                     button.click_event()
 
         if self.play.clicked:
+            self.sounds.click.play()
             self.active = False
             self.transition_to = game.Game(self.state)
 
         if self.settings.clicked:
+            self.sounds.click.play()
             self.active = False
             self.transition_to = settings.Settings(self.state)
 
