@@ -49,9 +49,9 @@ CARS_OBSTACLES = {
         "bmw-m3.png",
         "chevrolet-camaro.png",
         "mercedes-amg-gt-r.png",
-        "rolls-royce-spectre.png",
     ],
     "high": [
+        "rolls-royce-spectre.png",
         "bugatti-chiron.png",
         "ferrari-daytona-sp3.png",
         "lamborghini-aventador-svj.png",
