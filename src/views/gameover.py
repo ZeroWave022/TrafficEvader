@@ -3,7 +3,6 @@
 import pygame
 from src.views.view import View
 from src.ui import Button
-from src.managers import FontManager
 from src.config import WIDTH, HEIGHT
 
 import src.views.game as game
@@ -13,7 +12,6 @@ class GameOver(View):
     def __init__(self, state: dict) -> None:
         super().__init__(state)
 
-        self.fonts = FontManager()
         self.text = self.fonts.font_title.render("Game Over", True, "black", (255, 255, 255))
 
         self.retry = Button((WIDTH // 2 - 110, HEIGHT // 2 - 120, 220, 50), text="Retry")

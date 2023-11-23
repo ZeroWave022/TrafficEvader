@@ -5,7 +5,6 @@ from typing import Literal
 import pygame
 from src.views.view import View
 from src.sprites import Player, Background, Coin, Obstacle, Explosion
-from src.managers import FontManager, SoundManager
 from src.config import WIDTH, HEIGHT, INITIAL_SPEED, LEVELS
 
 import src.views.gameover as gameover
@@ -16,8 +15,6 @@ class Game(View):
         super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
 
-        self.fonts = FontManager()
-        self.sounds = SoundManager()
         self.level = LEVELS[self.state["difficulty"]]
         self.player = Player(f"./src/sprites/cars/{self.state['car']}.png", self.level)
         self.background = Background(self.level)

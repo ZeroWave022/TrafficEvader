@@ -3,6 +3,7 @@
 import sys
 import pygame
 from src.config import WIDTH, HEIGHT, FPS
+from src.managers import FontManager, SoundManager
 
 class View():
     """A base class for all game views with a game loop"""
@@ -13,6 +14,8 @@ class View():
             self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
         self.clock = pygame.time.Clock()
+        self.fonts = FontManager()
+        self.sounds = SoundManager()
         self.active = True
         self.transition_to: View | None = None
         self.state = state
