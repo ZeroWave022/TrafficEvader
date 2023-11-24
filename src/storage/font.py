@@ -2,7 +2,7 @@
 
 import pygame
 
-class FontManager():
+class Fonts():
     """Class storing game fonts"""
     def __init__(self) -> None:
         self.font_title = pygame.font.Font("./src/fonts/PublicPixel.woff", 38)

@@ -2,7 +2,7 @@
 
 from typing import Optional
 import pygame
-from src.managers import FontManager, SoundManager
+from src.storage import Fonts, Sounds
 
 class Button:
     def __init__(
@@ -15,8 +15,8 @@ class Button:
         self.color = color
         self.clicked = False
         self.text = text
-        self.fonts = FontManager()
-        self.sounds = SoundManager()
+        self.fonts = Fonts()
+        self.sounds = Sounds()
 
     def click_event(self):
         """Handles a click event in game loop iteration.
@@ -52,7 +52,7 @@ class SelectableItem():
             self.item_img = pygame.image.load(img_path).convert_alpha()
             self.item_img = pygame.transform.scale(self.item_img, (size[0] * 0.8, size[0] * 0.8))
         elif button_text:
-            self.item_img = FontManager().font_button.render(button_text, True, "black")
+            self.item_img = Fonts().font_button.render(button_text, True, "black")
         else:
             raise TypeError(
                 "Either img_path or button_text must be provided when instantiating SelectableItem"
@@ -93,7 +93,7 @@ class ItemSelector():
         self.rect = self.image.get_rect()
 
         self.active_item = self.rows[init_active[0]][init_active[1]]
-        self.sounds = SoundManager()
+        self.sounds = Sounds()
 
         self.set_item_positions()
 

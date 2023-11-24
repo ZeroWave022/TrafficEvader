@@ -2,7 +2,7 @@
 
 import pygame
 
-class SoundManager():
+class Sounds():
     """Class storing game sounds"""
     def __init__(self) -> None:
         self.coin = pygame.mixer.Sound("./src/sounds/coin.wav")
