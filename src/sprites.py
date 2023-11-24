@@ -4,6 +4,7 @@ from random import randint, choice
 from typing import Literal
 import pygame
 from src.config import WIDTH, HEIGHT, LANE_SWITCH_SPEED, CARS_OBSTACLES
+from src.utils import asset_path
 
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, img_path: str, scale: float | tuple[int, int] | None = None) -> None:
@@ -71,7 +72,7 @@ class Player(GameObject):
 
 class Coin(GameObject):
     def __init__(self, position: tuple[int, int], lane: int) -> None:
-        super().__init__("./src/assets/sprites/coin.png", (160, 32))
+        super().__init__(asset_path("sprites/coin.png"), (160, 32))
 
         # self.image and self.rect will be overwritten with coin used from the sprite sheet
         self.sheet_img = self.image
@@ -121,14 +122,15 @@ class Obstacle(GameObject):
 
     def select_random_car(self) -> str:
         rand = randint(1, 100)
-        obstacles_path = "./src/assets/sprites/obstacles/"
 
         if rand <= 60:
-            return obstacles_path + choice(CARS_OBSTACLES["low"])
-        if rand <= 97:
-            return obstacles_path + choice(CARS_OBSTACLES["medium"])
+            chosen_car = choice(CARS_OBSTACLES["low"])
+        elif rand <= 97:
+            chosen_car = choice(CARS_OBSTACLES["medium"])
+        else:
+            chosen_car = choice(CARS_OBSTACLES["high"])
 
-        return obstacles_path + choice(CARS_OBSTACLES["high"])
+        return asset_path(f"sprites/obstacles/{chosen_car}")
 
     def update(self, speed: int):
         """Move obstacle for new frame"""
@@ -136,7 +138,7 @@ class Obstacle(GameObject):
 
 class Explosion(GameObject):
     def __init__(self) -> None:
-        super().__init__("./src/assets/sprites/explosion.png", (640, 80))
+        super().__init__(asset_path("sprites/explosion.png"), (640, 80))
 
         self.sheet_img = self.image
         self.sheet_rect = self.rect
@@ -166,7 +168,8 @@ class Explosion(GameObject):
 class Background(GameObject):
     """Class managing game background"""
     def __init__(self, level: dict) -> None:
-        super().__init__(f"./src/assets/sprites/road_{level['lanes']}.png")
+        lanes_num = level['lanes']
+        super().__init__(asset_path(f"sprites/road_{lanes_num}.png"))
 
         self.level_info = level
         self.rect.x = (WIDTH - self.rect.width) // 2

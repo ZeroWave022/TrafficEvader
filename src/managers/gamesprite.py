@@ -5,6 +5,7 @@ from random import randint
 import pygame
 from src.config import HEIGHT, LEVELS
 from src.sprites import Player, Background, Coin, Obstacle, Explosion
+from src.utils import asset_path
 
 class GameSpriteManager:
     """Class managing spawning, despawning and updating sprites.
@@ -12,7 +13,8 @@ class GameSpriteManager:
     def __init__(self, state: dict) -> None:
         self.level = LEVELS[state["difficulty"]]
 
-        self.player = Player(f"./src/assets/sprites/cars/{state['car']}.png", self.level)
+        car_name = state["car"]
+        self.player = Player(asset_path(f"sprites/cars/{car_name}"), self.level)
         self.background = Background(self.level)
         self.coins: pygame.sprite.Group[Coin] = pygame.sprite.Group()
         self.obstacles: pygame.sprite.Group[Obstacle] = pygame.sprite.Group()

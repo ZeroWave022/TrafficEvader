@@ -4,16 +4,17 @@ import pygame
 from src.views.view import View
 from src.ui import Button, SelectableItem, ItemSelector
 from src.config import WIDTH, HEIGHT
+from src.utils import asset_path
 
 class Settings(View):
     def __init__(self, state: dict) -> None:
         super().__init__(state)
 
         self.cars = [[
-            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
-            SelectableItem("NES_touring_car", "./src/assets/sprites/cars/NES_touring_car.png", size=(80, 80)),
-            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
-            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
+            SelectableItem("blue_car.png", asset_path("sprites/cars/blue_car.png"), size=(80, 80)),
+            SelectableItem("NES_touring_car.png", asset_path("sprites/cars/NES_touring_car.png"), size=(80, 80)),
+            SelectableItem("blue_car.png", asset_path("sprites/cars/blue_car.png"), size=(80, 80)),
+            SelectableItem("blue_car.png", asset_path("sprites/cars/blue_car.png"), size=(80, 80)),
         ]]
 
         self.car_selector = ItemSelector(self.cars, self.state["car_index"])
