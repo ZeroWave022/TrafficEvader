@@ -12,7 +12,7 @@ class GameSpriteManager:
     def __init__(self, state: dict) -> None:
         self.level = LEVELS[state["difficulty"]]
 
-        self.player = Player(f"./src/sprites/cars/{state['car']}.png", self.level)
+        self.player = Player(f"./src/assets/sprites/cars/{state['car']}.png", self.level)
         self.background = Background(self.level)
         self.coins: pygame.sprite.Group[Coin] = pygame.sprite.Group()
         self.obstacles: pygame.sprite.Group[Obstacle] = pygame.sprite.Group()

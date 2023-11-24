@@ -10,10 +10,10 @@ class Settings(View):
         super().__init__(state)
 
         self.cars = [[
-            SelectableItem("blue_car", "./src/sprites/cars/blue_car.png", size=(80, 80)),
-            SelectableItem("NES_touring_car", "./src/sprites/cars/NES_touring_car.png", size=(80, 80)),
-            SelectableItem("blue_car", "./src/sprites/cars/blue_car.png", size=(80, 80)),
-            SelectableItem("blue_car", "./src/sprites/cars/blue_car.png", size=(80, 80)),
+            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
+            SelectableItem("NES_touring_car", "./src/assets/sprites/cars/NES_touring_car.png", size=(80, 80)),
+            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
+            SelectableItem("blue_car", "./src/assets/sprites/cars/blue_car.png", size=(80, 80)),
         ]]
 
         self.car_selector = ItemSelector(self.cars, self.state["car_index"])

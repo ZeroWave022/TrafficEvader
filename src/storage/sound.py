@@ -5,10 +5,10 @@ import pygame
 class Sounds():
     """Class storing game sounds"""
     def __init__(self) -> None:
-        self.coin = pygame.mixer.Sound("./src/sounds/coin.wav")
-        self.explosion = pygame.mixer.Sound("./src/sounds/explosion.wav")
-        self.click = pygame.mixer.Sound("./src/sounds/menu_click.wav")
-        self.click_deny = pygame.mixer.Sound("./src/sounds/menu_deny.wav")
+        self.coin = pygame.mixer.Sound("./src/assets/sounds/coin.wav")
+        self.explosion = pygame.mixer.Sound("./src/assets/sounds/explosion.wav")
+        self.click = pygame.mixer.Sound("./src/assets/sounds/menu_click.wav")
+        self.click_deny = pygame.mixer.Sound("./src/assets/sounds/menu_deny.wav")
 
         self.coin.set_volume(0.3)
         self.explosion.set_volume(0.3)
