@@ -5,8 +5,6 @@ from src.views.view import View
 from src.ui import Button, SelectableItem, ItemSelector
 from src.config import WIDTH, HEIGHT
 
-import src.views.menu as menu
-
 class Settings(View):
     def __init__(self, state: dict) -> None:
         super().__init__(state)
@@ -54,7 +52,7 @@ class Settings(View):
         if self.back.clicked:
             self.set_state()
             self.active = False
-            self.transition_to = menu.Menu(self.state)
+            self.transition_to = "menu"
 
     def render(self):
         self.screen.fill((255, 255, 255))

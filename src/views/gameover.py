@@ -5,9 +5,6 @@ from src.views.view import View
 from src.ui import Button
 from src.config import WIDTH, HEIGHT
 
-import src.views.game as game
-import src.views.menu as menu
-
 class GameOver(View):
     def __init__(self, state: dict) -> None:
         super().__init__(state)
@@ -36,10 +33,10 @@ class GameOver(View):
             self.active = False
 
         if self.retry.clicked:
-            self.transition_to = game.Game(self.state)
+            self.transition_to ="game"
 
         if self.back.clicked:
-            self.transition_to = menu.Menu(self.state)
+            self.transition_to = "menu"
 
         if self.exit_btn.clicked:
             self.exit()

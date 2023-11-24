@@ -5,8 +5,6 @@ from src.views.view import View
 from src.managers.gamesprite import GameSpriteManager
 from src.config import WIDTH, INITIAL_SPEED
 
-import src.views.gameover as gameover
-
 class Game(View):
     """Main game view class"""
     def __init__(self, state: dict) -> None:
@@ -54,7 +52,7 @@ class Game(View):
             self.exploding = True
             self.sounds.explosion.play()
             self.sprites.spawn_explosion(collided)
-            self.transition_to = gameover.GameOver(self.state)
+            self.transition_to = "gameover"
 
         # Third argument specifies to remove any coins collected from the coin sprite group
         coins_collected = pygame.sprite.spritecollide(self.sprites.player, self.sprites.coins, True, pygame.sprite.collide_mask)

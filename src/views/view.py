@@ -17,7 +17,7 @@ class View():
         self.fonts = Fonts()
         self.sounds = Sounds()
         self.active = True
-        self.transition_to: View | None = None
+        self.transition_to: str | None = None
         self.state = state
 
     def process_input(self) -> None:

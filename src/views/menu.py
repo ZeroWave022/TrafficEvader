@@ -5,9 +5,6 @@ from src.views.view import View
 from src.ui import Button
 from src.config import WIDTH, HEIGHT
 
-import src.views.game as game
-import src.views.settings as settings
-
 class Menu(View):
     """Main menu view class"""
     def __init__(self, state: dict) -> None:
@@ -33,12 +30,12 @@ class Menu(View):
         if self.play.clicked:
             self.sounds.click.play()
             self.active = False
-            self.transition_to = game.Game(self.state)
+            self.transition_to = "game"
 
         if self.settings.clicked:
             self.sounds.click.play()
             self.active = False
-            self.transition_to = settings.Settings(self.state)
+            self.transition_to = "settings"
 
         if self.exit_btn.clicked:
             self.exit()
