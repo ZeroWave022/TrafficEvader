@@ -1,73 +1,8 @@
-"""UI elements for Traffic Evader"""
+"""UI item selector"""
 
-from typing import Optional
 import pygame
-from src.storage import Fonts, Sounds
-
-class Button:
-    def __init__(
-        self,
-        rect_value: tuple[int, int, int, int],
-        color: tuple[int, int, int] | str = "gray",
-        text: Optional[str] = None
-    ) -> None:
-        self.rect = pygame.rect.Rect(*rect_value)
-        self.color = color
-        self.clicked = False
-        self.text = text
-        self.fonts = Fonts()
-        self.sounds = Sounds()
-
-    def click_event(self):
-        """Handles a click event in game loop iteration.
-        Call whenever a click event happens."""
-        mouse_position = pygame.mouse.get_pos()
-
-        if self.rect.collidepoint(mouse_position):
-            self.clicked = True
-            self.sounds.click.play()
-
-    def draw(self, dest_surface: pygame.Surface):
-        """Draw this button onto dest_surface."""
-        pygame.draw.rect(dest_surface, self.color, self.rect)
-
-        if self.text:
-            rendered_text = self.fonts.font_button.render(self.text, True, "black")
-            dest_surface.blit(rendered_text, rendered_text.get_rect(center=self.rect.center))
-
-class SelectableItem():
-    """An item which can be chosen by clicking on it."""
-    def __init__(
-            self,
-            item_id: str,
-            img_path: Optional[str] = None,
-            button_text: Optional[str] = None,
-            size: tuple[int, int] = (100, 100)
-        ) -> None:
-        self.item_id = item_id
-        self.image = pygame.surface.Surface(size, pygame.SRCALPHA)
-        self.rect = self.image.get_rect()
-
-        if img_path:
-            self.item_img = pygame.image.load(img_path).convert_alpha()
-            self.item_img = pygame.transform.scale(self.item_img, (size[0] * 0.8, size[0] * 0.8))
-        elif button_text:
-            self.item_img = Fonts().font_button.render(button_text, True, "black")
-        else:
-            raise TypeError(
-                "Either img_path or button_text must be provided when instantiating SelectableItem"
-            )
-
-        self.item_rect = self.item_img.get_rect(center=self.rect.center)
-
-    def draw(self, dest_surface: pygame.Surface, is_active: Optional[bool] = None):
-        if is_active:
-            self.image.fill((75, 75, 75, 80))
-        else:
-            self.image.fill((0, 0, 0, 0))
-
-        self.image.blit(self.item_img, self.item_rect)
-        return dest_surface.blit(self.image, self.rect)
+from src.storage import Sounds
+from .selectableitem import SelectableItem
 
 class ItemSelector():
     """Creates a row of SelectableItems and stores current choice.

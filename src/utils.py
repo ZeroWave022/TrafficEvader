@@ -12,4 +12,3 @@ def asset_path(file_path: str) -> str:
     assets_path = Path(__file__).parent.joinpath("./assets").resolve()
 
     return str(assets_path.joinpath(file_path))
-
