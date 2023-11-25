@@ -5,15 +5,16 @@ from src.storage import Sounds
 from .selectableitem import SelectableItem
 
 class ItemSelector():
-    """Creates a row of SelectableItems and stores current choice.
-    
-    grid_rows: list[list[SelectableItem]]
-        A list of rows (a list each) of SelectableItems which can be chosen.
-        Assumes all SelectableItems are of same size, and that all rows have the same amount of items.
-    init_active: tuple[int, int]
-        A tuple with two indexes (row, column) of the initially active item."""
+    """Creates a row of SelectableItems and stores current choice."""
 
     def __init__(self, grid_rows: list[list[SelectableItem]], init_active: tuple[int, int]) -> None:
+        """Instantiate an ItemSelector.
+
+        grid_rows: list[list[SelectableItem]]
+            A list of rows (a list each) of SelectableItems which can be chosen.
+            Assumes all SelectableItems are of same size, and that all rows have the same amount of items.
+        init_active: tuple[int, int]
+            A tuple with two indexes (row, column) of the initially active item."""
         self.rows = grid_rows
         self.items_width = self.rows[0][0].rect.width
         self.items_height = self.rows[0][0].rect.height
@@ -33,6 +34,7 @@ class ItemSelector():
         self._set_item_positions()
 
     def _set_item_positions(self) -> None:
+        """Sets up item positions in the grid."""
         row_y = 0
         for row in self.rows:
             x_pos = 0
@@ -43,7 +45,8 @@ class ItemSelector():
 
             row_y += self.items_height + 25
 
-    def get_active_item_index(self):
+    def get_active_item_index(self) -> tuple[int, int]:
+        """Retrieve the index of the active item."""
         for row_id, row in enumerate(self.rows):
             currently_selected = next((i for i in row if i == self.active_item), None)
             if currently_selected is not None:
@@ -52,6 +55,7 @@ class ItemSelector():
         raise RuntimeError("Index of active item in ItemSelector could not be found")
 
     def process_input(self, position: tuple[int, int]) -> None:
+        """Handle a click event for an ItemSelector."""
         if not self.rect.collidepoint(position):
             return
 
@@ -69,7 +73,8 @@ class ItemSelector():
                         self.sounds.click.play()
                     break
 
-    def draw(self, dest_surface: pygame.Surface):
+    def draw(self, dest_surface: pygame.Surface) -> None:
+        """Draw this ItemSelector onto dest_surface."""
         self.image.fill((0, 0, 0, 0))
         self.active_item.draw(self.image, True)
 

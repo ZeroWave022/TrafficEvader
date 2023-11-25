@@ -3,6 +3,7 @@
 import pygame
 
 class GameObject(pygame.sprite.Sprite):
+    """A base game object class for all sprites"""
     def __init__(self, img_path: str, scale: float | tuple[int, int] | None = None) -> None:
         super().__init__()
 

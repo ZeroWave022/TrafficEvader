@@ -33,7 +33,7 @@ class View():
         Override this method when inheriting.
         """
 
-    def run(self):
+    def run(self) -> None:
         """Run game loop"""
         while self.active:
             self.process_input()
@@ -41,7 +41,7 @@ class View():
             self.render()
             self.clock.tick(FPS)
 
-    def exit(self):
+    def exit(self) -> None:
         """Quit pygame and end python process"""
         pygame.quit()
         sys.exit()

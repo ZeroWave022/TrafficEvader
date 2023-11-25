@@ -14,7 +14,7 @@ class Background(GameObject):
         self.rect.x = (WIDTH - self.rect.width) // 2
         self.rect.bottom = HEIGHT
 
-    def update(self, speed: int):
+    def update(self, speed: int) -> None:
         """Move background for new frame"""
 
         # The background is twice the screen size.
@@ -24,7 +24,7 @@ class Background(GameObject):
 
         self.rect.y += speed
 
-    def draw(self, dest_surface: pygame.Surface):
+    def draw(self, dest_surface: pygame.Surface) -> None:
         second_bg = self.rect.copy()
         second_bg.y -= second_bg.height
 

@@ -5,6 +5,7 @@ from src.utils import asset_path
 from .gameobject import GameObject
 
 class Explosion(GameObject):
+    """Explosion sprite class"""
     def __init__(self) -> None:
         super().__init__(asset_path("sprites/explosion.png"), (640, 80))
 
@@ -21,7 +22,7 @@ class Explosion(GameObject):
         self.animation_finished = False
 
     def update(self) -> None:
-        """Updates explosion sprite"""
+        """Updates explosion sprite, shows next animation frame"""
         self._frame_counter += 1
         if self._frame_counter >= 12:
             self._frame_counter = 0

@@ -5,6 +5,7 @@ import pygame
 from src.storage import Fonts, Sounds
 
 class Button:
+    """A UI button to handle user input"""
     def __init__(
         self,
         rect_value: tuple[int, int, int, int],

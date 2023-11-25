@@ -7,6 +7,7 @@ from src.config import WIDTH, HEIGHT
 from src.utils import asset_path
 
 class Settings(View):
+    """Game settings view class"""
     def __init__(self, state: dict) -> None:
         super().__init__(state)
 
@@ -35,7 +36,9 @@ class Settings(View):
 
         self.back = Button((WIDTH // 2 - 110, HEIGHT - 150, 220, 50), text="Back to Menu")
 
-    def _set_state(self):
+    def _set_state(self) -> None:
+        """Updates the state.
+        Use it before the state is passed onto the next view."""
         self.state["difficulty"] = self.diff_selector.active_item.item_id
         self.state["car"] = self.car_selector.active_item.item_id
         self.state["car_index"] = self.car_selector.get_active_item_index()
@@ -55,7 +58,7 @@ class Settings(View):
             self.active = False
             self.transition_to = "menu"
 
-    def render(self):
+    def render(self) -> None:
         self.screen.fill((255, 255, 255))
 
         self.diff_selector.draw(self.screen)

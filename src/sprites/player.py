@@ -21,6 +21,8 @@ class Player(GameObject):
         self._moving_to = 0
 
     def move_left(self) -> None:
+        """Initiate a lane switch.
+        The movement itself is handled later, in update()."""
         if not self.switching_lane and self.lane - 1 >= 1:
             self.switching_lane = "left"
             self.lane -= 1
@@ -28,12 +30,15 @@ class Player(GameObject):
 
 
     def move_right(self) -> None:
+        """Initiate a lane switch.
+        The movement itself is handled later, in update()."""
         if not self.switching_lane and self.lane + 1 <= self.level_info["lanes"]:
             self.switching_lane = "right"
             self.lane += 1
             self._moving_to = self.rect.centerx + self.level_info["lane_width"]
 
     def update(self) -> None:
+        """Move player for new frame"""
         if self.switching_lane == "left":
             # Only move player by delta_x if it won't move it too far (inaccuracy caused by rounding)
             if self.rect.centerx - self._lane_delta_x > self._moving_to:

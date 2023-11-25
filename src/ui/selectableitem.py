@@ -5,7 +5,8 @@ import pygame
 from src.storage import Fonts
 
 class SelectableItem():
-    """An item which can be chosen by clicking on it."""
+    """An item which can be chosen by clicking on it.
+    Includes own item image/rect and a background around it."""
     def __init__(
             self,
             item_id: str,
@@ -30,6 +31,8 @@ class SelectableItem():
         self.item_rect = self.item_img.get_rect(center=self.rect.center)
 
     def draw(self, dest_surface: pygame.Surface, is_active: Optional[bool] = None):
+        """Draw this SelectableItem onto dest_surface.
+        If the item is set as active, the background will be gray."""
         if is_active:
             self.image.fill((75, 75, 75, 80))
         else:

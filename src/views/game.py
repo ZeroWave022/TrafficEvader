@@ -23,13 +23,15 @@ class GameSpriteManager:
         # Special sprite which is rendered manually and managed by the Game view
         self.explosion = Explosion()
 
-    def update(self, speed: int):
+    def update(self, speed: int) -> None:
+        """Update game sprites"""
         self.background.update(speed)
         self.coins.update(speed)
         self.obstacles.update(speed)
         self.player.update()
 
-    def spawn_road_objects(self, speed: int):
+    def spawn_road_objects(self, speed: int) -> None:
+        """Spawn road objects for a new frame, if needed."""
         if len(self.coins) < speed:
             diff = speed - len(self.coins)
             if diff < 3:
@@ -45,6 +47,7 @@ class GameSpriteManager:
                 self._add_road_objects("obstacle", 3, speed)
 
     def despawn_obsolete(self) -> None:
+        """Despawn road objects which are no longer visible."""
         for coin in self.coins:
             if coin.rect.top > HEIGHT:
                 self.coins.remove(coin)
@@ -54,6 +57,8 @@ class GameSpriteManager:
                 self.obstacles.remove(obstacle)
 
     def spawn_explosion(self, collided_with: Obstacle) -> None:
+        """Spawns an explosion in the point of collision between the player and collided_with.
+        Only supposed to be used when the game is over."""
         overlap_pos = list(
             self.player.mask.overlap(
                 collided_with.mask,
@@ -71,12 +76,12 @@ class GameSpriteManager:
             self.explosion.rect.centerx = overlap_pos[0]
             self.explosion.rect.centery = overlap_pos[1]
 
-    def road_position_free(self, lane: int, new_rect: pygame.Rect):
+    def road_position_free(self, lane: int, new_rect: pygame.Rect) -> bool:
         """Check if a position on the road,
         specified by lane and the rectangle of the object about to be spawned,
         isn't occupied by any other objects.
         This is to avoid layered objects on top of each other.
-        Returns true if free, false otherwise."""
+        Returns a bool indicating if the position is free."""
 
         obstacles_on_same_lane = [o.rect for o in self.obstacles if o.lane == lane]
         coins_on_same_lane = [c.rect for c in self.coins if c.lane == lane]
@@ -87,7 +92,7 @@ class GameSpriteManager:
         return True
 
     def _add_road_objects(self, obj: Literal["obstacle", "coin"], amount: int, speed: int) -> None:
-        """Adds/spawns multiple road objects (obstacles or coins)"""
+        """Add/spawn multiple road objects (obstacles or coins)"""
         lane_width = self.level["lane_width"]
         distance_to_road = self.background.rect.left
         obstacle_width = 64
@@ -124,6 +129,7 @@ class GameSpriteManager:
                 self.coins.add(Coin((pos_x, -height), lane))
 
     def draw(self, dest_surface: pygame.Surface) -> None:
+        """Draw all game sprites onto dest_surface."""
         self.background.draw(dest_surface)
         self.coins.draw(dest_surface)
         self.obstacles.draw(dest_surface)
@@ -196,7 +202,6 @@ class Game(View):
             self.speed += 1
 
     def render(self) -> None:
-        """Render: Fill background, blit sprites, etc"""
         self.screen.fill((255, 255, 255))
 
         self.sprites.draw(self.screen)

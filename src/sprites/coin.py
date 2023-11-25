@@ -5,6 +5,7 @@ from src.utils import asset_path
 from .gameobject import GameObject
 
 class Coin(GameObject):
+    """Coin sprite class"""
     def __init__(self, position: tuple[int, int], lane: int) -> None:
         super().__init__(asset_path("sprites/coin.png"), (160, 32))
 
@@ -28,7 +29,8 @@ class Coin(GameObject):
         self.rect.x = position[0]
         self.rect.y = position[1]
 
-    def update(self, speed: int):
+    def update(self, speed: int) -> None:
+        """Move sprite for new frame"""
         self._frame_counter += 1
 
         if self._frame_counter >= 8:

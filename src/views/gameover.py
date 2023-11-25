@@ -6,6 +6,7 @@ from src.ui import Button
 from src.config import WIDTH, HEIGHT
 
 class GameOver(View):
+    """Game over view class"""
     def __init__(self, state: dict) -> None:
         super().__init__(state)
 
