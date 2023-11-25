@@ -7,14 +7,14 @@ from .gameobject import GameObject
 
 class Obstacle(GameObject):
     def __init__(self, position: tuple[int, int], lane: int):
-        self.img_path = self.select_random_car()
+        self.img_path = self._select_random_car()
         super().__init__(self.img_path, (64, 64))
 
         self.rect.x = position[0]
         self.rect.y = position[1]
         self.lane = lane
 
-    def select_random_car(self) -> str:
+    def _select_random_car(self) -> str:
         rand = randint(1, 100)
 
         if rand <= 60:

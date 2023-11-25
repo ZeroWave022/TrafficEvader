@@ -30,9 +30,9 @@ class ItemSelector():
         self.active_item = self.rows[init_active[0]][init_active[1]]
         self.sounds = Sounds()
 
-        self.set_item_positions()
+        self._set_item_positions()
 
-    def set_item_positions(self) -> None:
+    def _set_item_positions(self) -> None:
         row_y = 0
         for row in self.rows:
             x_pos = 0

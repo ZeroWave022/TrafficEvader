@@ -9,7 +9,7 @@ class GameOver(View):
     def __init__(self, state: dict) -> None:
         super().__init__(state)
 
-        self.text = self.fonts.font_title.render("Game Over", True, "black", (255, 255, 255))
+        self.title = self.fonts.font_title.render("Game Over", True, "black", (255, 255, 255))
 
         self.retry = Button((WIDTH // 2 - 110, HEIGHT // 2 - 120, 220, 50), text="Retry")
         self.back = Button((WIDTH // 2 - 110, HEIGHT // 2 - 60, 220, 50), text="Back to Menu")
@@ -49,6 +49,6 @@ class GameOver(View):
         for button in self.buttons:
             button.draw(self.screen)
         
-        self.screen.blit(self.text, ((WIDTH - self.text.get_width()) // 2, HEIGHT - 450))
+        self.screen.blit(self.title, ((WIDTH - self.title.get_width()) // 2, HEIGHT - 450))
 
         pygame.display.flip()

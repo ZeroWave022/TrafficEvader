@@ -11,7 +11,6 @@ class Background(GameObject):
         lanes_num = level['lanes']
         super().__init__(asset_path(f"sprites/road_{lanes_num}.png"))
 
-        self.level_info = level
         self.rect.x = (WIDTH - self.rect.width) // 2
         self.rect.bottom = HEIGHT
 

@@ -35,7 +35,7 @@ class Settings(View):
 
         self.back = Button((WIDTH // 2 - 110, HEIGHT - 150, 220, 50), text="Back to Menu")
 
-    def set_state(self):
+    def _set_state(self):
         self.state["difficulty"] = self.diff_selector.active_item.item_id
         self.state["car"] = self.car_selector.active_item.item_id
         self.state["car_index"] = self.car_selector.get_active_item_index()
@@ -51,7 +51,7 @@ class Settings(View):
                 self.back.click_event()
 
         if self.back.clicked:
-            self.set_state()
+            self._set_state()
             self.active = False
             self.transition_to = "menu"
 
