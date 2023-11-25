@@ -11,7 +11,7 @@ class ViewManager():
         self.state = {
             "difficulty": "normal",
             "difficulty_index": (0, 0),
-            "car": "blue-car.png",
+            "car": "racing-blue-car.png",
             "car_index": (0, 0)
         }
         self.views = {
