@@ -1,5 +1,6 @@
 """Base view module"""
 
+import asyncio
 import sys
 import pygame
 from src.config import WIDTH, HEIGHT, FPS
@@ -35,13 +36,14 @@ class View:
         Override this method when inheriting.
         """
 
-    def run(self) -> None:
+    async def run(self) -> None:
         """Run game loop"""
         while self.active:
             self.process_input()
             self.update()
             self.render()
             self.clock.tick(FPS)
+            await asyncio.sleep(0)
 
     def exit(self) -> None:
         """Quit pygame and end python process"""

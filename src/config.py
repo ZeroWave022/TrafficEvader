@@ -1,7 +1,7 @@
 """Traffic Evader config"""
 
-WIDTH = 960
-HEIGHT = 540
+WIDTH = 1024
+HEIGHT = 600
 FPS = 60
 INITIAL_SPEED = 3
 LANE_SWITCH_SPEED = 1

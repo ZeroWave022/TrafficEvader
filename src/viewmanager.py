@@ -3,6 +3,7 @@
 import sys
 import pygame
 from src.views import View, Game, GameOver, Menu, Settings
+import asyncio
 
 
 class ViewManager:
@@ -26,18 +27,18 @@ class ViewManager:
 
         self.current_view = Menu(self.state)
 
-        self.show_view(self.current_view)
+        asyncio.run(self.show_view(self.current_view))
 
-    def show_view(self, view: View) -> None:
+    async def show_view(self, view: View):
         """Display a view.
         Transitions to new view if one is set when the initial view isn't active anymore.
         """
-        view.run()
+        await view.run()
 
         if view.transition_to:
             # Get the View class we're transitioning to
             move_to = self.views[view.transition_to]
-            self.show_view(move_to(view.state))
+            await self.show_view(move_to(view.state))
         else:
             pygame.quit()
             sys.exit()
