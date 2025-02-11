@@ -5,10 +5,12 @@ from src.config import WIDTH, HEIGHT
 from src.utils import asset_path
 from .gameobject import GameObject
 
+
 class Background(GameObject):
     """Class managing game background"""
+
     def __init__(self, level: dict) -> None:
-        lanes_num = level['lanes']
+        lanes_num = level["lanes"]
         # Road is the "main" sprite, so self.image and self.rect refer to the road
         super().__init__(asset_path(f"sprites/road_{lanes_num}.png"))
 
@@ -55,13 +57,11 @@ class Background(GameObject):
         # Blit left background
         dest_surface.blit(self.bg_left, self.bg_left_rect)
         dest_surface.blit(
-            self.bg_left,
-            (self.bg_left_rect.x, self.bg_left_rect.y - bg_height)
+            self.bg_left, (self.bg_left_rect.x, self.bg_left_rect.y - bg_height)
         )
 
         # Blit right background
         dest_surface.blit(self.bg_right, self.bg_right_rect)
         dest_surface.blit(
-            self.bg_right,
-            (self.bg_right_rect.x, self.bg_right_rect.y - bg_height)
+            self.bg_right, (self.bg_right_rect.x, self.bg_right_rect.y - bg_height)
         )

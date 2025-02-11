@@ -4,8 +4,10 @@ import pygame
 from src.utils import asset_path
 from .gameobject import GameObject
 
+
 class Coin(GameObject):
     """Coin sprite class"""
+
     def __init__(self, position: tuple[int, int], lane: int) -> None:
         super().__init__(asset_path("sprites/coin.png"), (160, 32))
 
@@ -41,7 +43,9 @@ class Coin(GameObject):
 
             self.image.fill((0, 0, 0, 0))
             # Move the area (third argument) based on the next coin sprite to be shown
-            self.image.blit(self._sheet_img, (0, 0), (self._current_sprite*32, 0, 32, 32))
+            self.image.blit(
+                self._sheet_img, (0, 0), (self._current_sprite * 32, 0, 32, 32)
+            )
 
             self._frame_counter = 0
 

@@ -3,8 +3,10 @@
 import pygame
 from src.utils import asset_path
 
-class Fonts():
+
+class Fonts:
     """Class storing game fonts"""
+
     def __init__(self) -> None:
         font_path = asset_path("fonts/PublicPixel.woff")
 

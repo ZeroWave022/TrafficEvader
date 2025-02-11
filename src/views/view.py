@@ -5,8 +5,10 @@ import pygame
 from src.config import WIDTH, HEIGHT, FPS
 from src.storage import Fonts, Sounds
 
-class View():
+
+class View:
     """A base class for all game views with a game loop"""
+
     def __init__(self, state: dict) -> None:
         if pygame.display.get_active():
             self.screen = pygame.display.get_surface()

@@ -3,8 +3,10 @@
 import pygame
 from src.utils import asset_path
 
-class Sounds():
+
+class Sounds:
     """Class storing game sounds"""
+
     def __init__(self) -> None:
         self.coin = pygame.mixer.Sound(asset_path("sounds/coin.wav"))
         self.explosion = pygame.mixer.Sound(asset_path("sounds/explosion.wav"))

@@ -5,8 +5,10 @@ from src.views.view import View
 from src.ui import Button
 from src.config import WIDTH, HEIGHT
 
+
 class Menu(View):
     """Main menu view class"""
+
     def __init__(self, state: dict) -> None:
         super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
@@ -14,7 +16,9 @@ class Menu(View):
         self.title = self.fonts.font_title.render("Traffic Evader", True, "black")
 
         self.play = Button((WIDTH // 2 - 75, HEIGHT - 350, 150, 50), text="Play")
-        self.settings = Button((WIDTH // 2 - 75, HEIGHT - 290, 150, 50), text="Settings")
+        self.settings = Button(
+            (WIDTH // 2 - 75, HEIGHT - 290, 150, 50), text="Settings"
+        )
         self.exit_btn = Button((WIDTH // 2 - 75, HEIGHT - 230, 150, 50), text="Quit")
 
         self.buttons = [self.play, self.settings, self.exit_btn]
@@ -46,6 +50,8 @@ class Menu(View):
         for button in self.buttons:
             button.draw(self.screen)
 
-        self.screen.blit(self.title, ((WIDTH - self.title.get_width()) // 2, HEIGHT - 450))
+        self.screen.blit(
+            self.title, ((WIDTH - self.title.get_width()) // 2, HEIGHT - 450)
+        )
 
         pygame.display.flip()

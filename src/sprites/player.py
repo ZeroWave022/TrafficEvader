@@ -4,8 +4,10 @@ from typing import Literal
 from src.config import LANE_SWITCH_SPEED
 from .gameobject import GameObject
 
+
 class Player(GameObject):
     """Class managing the player"""
+
     def __init__(self, img_path: str, level: dict) -> None:
         super().__init__(img_path, (75, 75))
 
@@ -27,7 +29,6 @@ class Player(GameObject):
             self.switching_lane = "left"
             self.lane -= 1
             self._moving_to = self.rect.centerx - self.level_info["lane_width"]
-
 
     def move_right(self) -> None:
         """Initiate a lane switch.

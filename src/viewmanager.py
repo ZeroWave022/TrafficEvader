@@ -4,21 +4,24 @@ import sys
 import pygame
 from src.views import View, Game, GameOver, Menu, Settings
 
-class ViewManager():
+
+class ViewManager:
     """A class managing what view is displayed.
-    The constructor needs a non-instantiated View class which will be the first view shown."""
+    The constructor needs a non-instantiated View class which will be the first view shown.
+    """
+
     def __init__(self) -> None:
         self.state = {
             "difficulty": "normal",
             "difficulty_index": (0, 0),
             "car": "racing-blue-car.png",
-            "car_index": (0, 0)
+            "car_index": (0, 0),
         }
         self.views = {
             "game": Game,
             "gameover": GameOver,
             "menu": Menu,
-            "settings": Settings
+            "settings": Settings,
         }
 
         self.current_view = Menu(self.state)
@@ -27,7 +30,8 @@ class ViewManager():
 
     def show_view(self, view: View) -> None:
         """Display a view.
-        Transitions to new view if one is set when the initial view isn't active anymore."""
+        Transitions to new view if one is set when the initial view isn't active anymore.
+        """
         view.run()
 
         if view.transition_to:

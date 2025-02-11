@@ -4,13 +4,15 @@ from typing import Optional
 import pygame
 from src.storage import Fonts, Sounds
 
+
 class Button:
     """A UI button to handle user input"""
+
     def __init__(
         self,
         rect_value: tuple[int, int, int, int],
         color: tuple[int, int, int] | str = "gray",
-        text: Optional[str] = None
+        text: Optional[str] = None,
     ) -> None:
         self.rect = pygame.rect.Rect(*rect_value)
         self.color = color
@@ -34,4 +36,6 @@ class Button:
 
         if self.text:
             rendered_text = self.fonts.font_button.render(self.text, True, "black")
-            dest_surface.blit(rendered_text, rendered_text.get_rect(center=self.rect.center))
+            dest_surface.blit(
+                rendered_text, rendered_text.get_rect(center=self.rect.center)
+            )

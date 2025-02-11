@@ -8,9 +8,11 @@ from src.sprites import Player, Background, Coin, Obstacle, Explosion
 from src.config import HEIGHT, LEVELS, WIDTH, INITIAL_SPEED
 from src.utils import asset_path
 
+
 class GameSpriteManager:
     """Class managing spawning, despawning and updating sprites.
     Used by the Game view."""
+
     def __init__(self, state: dict) -> None:
         self.level = LEVELS[state["difficulty"]]
 
@@ -62,7 +64,10 @@ class GameSpriteManager:
         overlap_pos = list(
             self.player.mask.overlap(
                 collided_with.mask,
-                (collided_with.rect.x - self.player.rect.x, collided_with.rect.y - self.player.rect.y)
+                (
+                    collided_with.rect.x - self.player.rect.x,
+                    collided_with.rect.y - self.player.rect.y,
+                ),
             )
         )
         # Collisions which are (nearly) head-on, should have it's explosion center at midtop of car
@@ -86,12 +91,17 @@ class GameSpriteManager:
         obstacles_on_same_lane = [o.rect for o in self.obstacles if o.lane == lane]
         coins_on_same_lane = [c.rect for c in self.coins if c.lane == lane]
 
-        if new_rect.collidelist(obstacles_on_same_lane) != -1 or new_rect.collidelist(coins_on_same_lane) != -1:
+        if (
+            new_rect.collidelist(obstacles_on_same_lane) != -1
+            or new_rect.collidelist(coins_on_same_lane) != -1
+        ):
             return False
 
         return True
 
-    def _add_road_objects(self, obj: Literal["obstacle", "coin"], amount: int, speed: int) -> None:
+    def _add_road_objects(
+        self, obj: Literal["obstacle", "coin"], amount: int, speed: int
+    ) -> None:
         """Add/spawn multiple road objects (obstacles or coins)"""
         lane_width = self.level["lane_width"]
         distance_to_road = self.background.rect.left
@@ -99,15 +109,15 @@ class GameSpriteManager:
         coin_width = 32
 
         for _ in range(amount):
-            lane = randint(1, self.level["lanes"]) # type: ignore
+            lane = randint(1, self.level["lanes"])  # type: ignore
             height = randint(50, 400)
 
             # x coordinate:
             # Distance to start of road + 30px side line + x_lanes*lane_width - (1/2)*(lane_width - 10px) - 10px (white line) - 1/2 object width
-            pos_x = distance_to_road + 30 + lane*lane_width - (lane_width-10)//2 - 10 # type: ignore
+            pos_x = distance_to_road + 30 + lane * lane_width - (lane_width - 10) // 2 - 10  # type: ignore
 
             if obj == "obstacle":
-                pos_x -= obstacle_width//2
+                pos_x -= obstacle_width // 2
                 new_rect = pygame.rect.Rect((pos_x, -height, 64, 64))
 
                 # If the position on the road isn't free, re-randomize the height
@@ -115,11 +125,9 @@ class GameSpriteManager:
                     height = randint(50, speed * 100)
                     new_rect.y = -height
 
-                self.obstacles.add(
-                    Obstacle((pos_x, -height), lane)
-                )
+                self.obstacles.add(Obstacle((pos_x, -height), lane))
             elif obj == "coin":
-                pos_x -= coin_width//2
+                pos_x -= coin_width // 2
                 new_rect = pygame.rect.Rect((pos_x, -height, 32, 32))
 
                 while not self.road_position_free(lane, new_rect):
@@ -138,12 +146,13 @@ class GameSpriteManager:
 
 class Game(View):
     """Main game view class"""
+
     def __init__(self, state: dict) -> None:
         super().__init__(state)
         pygame.display.set_caption("Traffic Evader")
 
         self.sprites = GameSpriteManager(self.state)
-        
+
         self.score_text = self.fonts.font_score.render("0", True, "black")
 
         self.frame_count = 0
@@ -177,7 +186,9 @@ class Game(View):
         self.sprites.spawn_road_objects(self.speed)
         self.sprites.despawn_obsolete()
 
-        collided = pygame.sprite.spritecollideany(self.sprites.player, self.sprites.obstacles, pygame.sprite.collide_mask)
+        collided = pygame.sprite.spritecollideany(
+            self.sprites.player, self.sprites.obstacles, pygame.sprite.collide_mask
+        )
 
         if collided:
             self.exploding = True
@@ -186,7 +197,9 @@ class Game(View):
             self.transition_to = "gameover"
 
         # Third argument specifies to remove any coins collected from the coin sprite group
-        coins_collected = pygame.sprite.spritecollide(self.sprites.player, self.sprites.coins, True, pygame.sprite.collide_mask)
+        coins_collected = pygame.sprite.spritecollide(
+            self.sprites.player, self.sprites.coins, True, pygame.sprite.collide_mask
+        )
 
         self.score += len(coins_collected)
         if len(coins_collected) > 0 and self.score % 10 == 0:

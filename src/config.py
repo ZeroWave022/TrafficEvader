@@ -10,27 +10,18 @@ LEVELS = {
     "easy": {
         "lanes": 5,
         "lane_width": 90,
-        "player": {
-            "init_x": WIDTH // 2 - 40,
-            "init_lane": 3
-        }
+        "player": {"init_x": WIDTH // 2 - 40, "init_lane": 3},
     },
     "normal": {
         "lanes": 4,
         "lane_width": 112,
-        "player": {
-            "init_x": WIDTH // 2 - 95,
-            "init_lane": 2
-        }
+        "player": {"init_x": WIDTH // 2 - 95, "init_lane": 2},
     },
     "hard": {
         "lanes": 3,
         "lane_width": 150,
-        "player": {
-            "init_x": WIDTH // 2 - 40,
-            "init_lane": 2
-        }
-    }
+        "player": {"init_x": WIDTH // 2 - 40, "init_lane": 2},
+    },
 }
 
 CARS_OBSTACLES = {
@@ -56,6 +47,6 @@ CARS_OBSTACLES = {
         "ferrari-daytona-sp3.png",
         "lamborghini-aventador-svj.png",
         "lexus-lfa.png",
-        "porsche-911-gt3-rs.png"
-    ]
+        "porsche-911-gt3-rs.png",
+    ],
 }

@@ -4,10 +4,13 @@ import pygame
 from src.storage import Sounds
 from .selectableitem import SelectableItem
 
-class ItemSelector():
+
+class ItemSelector:
     """Creates a row of SelectableItems and stores current choice."""
 
-    def __init__(self, grid_rows: list[list[SelectableItem]], init_active: tuple[int, int]) -> None:
+    def __init__(
+        self, grid_rows: list[list[SelectableItem]], init_active: tuple[int, int]
+    ) -> None:
         """Instantiate an ItemSelector.
 
         grid_rows: list[list[SelectableItem]]
@@ -22,9 +25,9 @@ class ItemSelector():
         self.image = pygame.surface.Surface(
             (
                 self.items_width * len(self.rows[0]) + (len(self.rows[0]) - 1) * 50,
-                self.items_height * len(self.rows) + (len(self.rows) - 1) * 25
+                self.items_height * len(self.rows) + (len(self.rows) - 1) * 25,
             ),
-            pygame.SRCALPHA
+            pygame.SRCALPHA,
         )
         self.rect = self.image.get_rect()
 
