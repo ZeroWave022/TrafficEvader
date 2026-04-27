@@ -29,7 +29,7 @@ class ViewManager:
 
         asyncio.run(self.show_view(self.current_view))
 
-    async def show_view(self, view: View):
+    async def show_view(self, view: View) -> None:
         """Display a view.
         Transitions to new view if one is set when the initial view isn't active anymore.
         """
