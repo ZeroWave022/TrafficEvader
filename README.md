@@ -2,6 +2,8 @@
 
 A simple car game. Evade the traffic, collect coins and earn high scores!
 
+[**Play now!**](https://zerowave022.github.io/TrafficEvader)
+
 ![Traffic Evader gameplay preview](./imgs/preview.png)
 
 To play the game, download the project, and start `main.py`:
@@ -41,18 +43,15 @@ The diagrams are valid as of commit [14cd1c8](https://github.com/ZeroWave022/Tra
 <!-- ![Storage module UML class diagram](./imgs/storage.png) -->
 <img src="./imgs/storage.png" alt="Storage module UML class diagram" width="75%">
 
-
 ### `sprites` class diagram
 
 <!-- ![Sprites module UML class diagram](./imgs/sprites.png) -->
 <img src="./imgs/sprites.png" alt="Sprites module UML class diagram" width="75%">
 
-
 ### `ui` class diagram
 
 <!-- ![UI module UML class diagram](./imgs/ui.png) -->
 <img src="./imgs/ui.png" alt="UI module UML class diagram" width="75%">
-
 
 ### `views` class diagram
 
